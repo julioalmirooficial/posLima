@@ -1,5 +1,6 @@
 package components;
 
+import componentsregistry.RgtProducts;
 import componentsregistry.RgtUser;
 import controller.ControllerProducts;
 import controller.ControllerUser;
@@ -214,7 +215,7 @@ public class WindowProducts extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        RgtUser modal = new RgtUser();
+        RgtProducts modal = new RgtProducts();
         modal.setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
 

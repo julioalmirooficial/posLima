@@ -66,7 +66,7 @@ public class ControllerProducts {
         }
     }
 
-    public boolean insertTypeProduct(ModelProducts dts) {
+    public boolean insertProducts(ModelProducts dts) {
         query = "INSERT INTO products "
                 + "(idtype_product, bar_code, title, description, discount, utility, stock, stock_minimun, price_shopping, price_sale, for_stock) "
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
@@ -90,7 +90,7 @@ public class ControllerProducts {
         }
     }
 
-    public boolean updateTypeProduct(ModelProducts dts) {
+    public boolean updateProducts(ModelProducts dts) {
         query = "UPDATE products SET "
                 + "bar_code=?, title=?, description=?, discount=?, utility=?, stock=?, stock_minimun=?, price_shopping=?, price_sale=?, for_stock=? WHERE id=?";
         try {
@@ -113,7 +113,7 @@ public class ControllerProducts {
         }
     }
 
-    public boolean deleteTypeProduct(ModelProducts dts) {
+    public boolean deleteProducts(ModelProducts dts) {
         query = "DELETE FROM products WHERE id=?";
         try {
             PreparedStatement pst = cn.prepareStatement(query);

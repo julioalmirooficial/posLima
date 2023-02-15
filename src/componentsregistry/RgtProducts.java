@@ -1,7 +1,9 @@
 package componentsregistry;
 
-import static components.WindowTypeProduct.listTypeProducts;
-import controller.ControllerTypeproduct;
+import static components.WindowProducts.listProducts;
+import controller.ControllerProducts;
+import controllerpublic.UIComboBox;
+import controllerpublic.cbxTypeProducts;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -12,7 +14,7 @@ import database.ConnectionDB;
 import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import model.ModelTypeProduct;
+import model.ModelProducts;
 
 public class RgtProducts extends javax.swing.JFrame {
 
@@ -24,18 +26,30 @@ public class RgtProducts extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         idUpdateData.setVisible(false);
         this.setBackground(new Color(0, 0, 0, 50));
+        cbxTypeProduct.setUI(UIComboBox.createUI(rootPane));
+        cbxTypeProducts cbxType = new cbxTypeProducts();
+        cbxType.viewTypeProduct(cbxTypeProduct);
     }
 
-    void getTypeProduct() {
-         ControllerTypeproduct cTypeProduct = new ControllerTypeproduct();
+    void getProducts() {
+          ControllerProducts cProducts = new ControllerProducts();
         try {
             DefaultTableModel model;
-            model = cTypeProduct.getTypeProduct("");
-            listTypeProducts.setModel(model);
-            listTypeProducts.getColumnModel().getColumn(0).setMaxWidth(0);
-            listTypeProducts.getColumnModel().getColumn(0).setMinWidth(0);
-            listTypeProducts.getColumnModel().getColumn(0).setPreferredWidth(0);
-            listTypeProducts.setDefaultEditor(Object.class, null);
+            model = cProducts.getProducts("");
+            listProducts.setModel(model);
+            listProducts.getColumnModel().getColumn(0).setMaxWidth(0);
+            listProducts.getColumnModel().getColumn(0).setMinWidth(0);
+            listProducts.getColumnModel().getColumn(0).setPreferredWidth(0);
+            listProducts.getColumnModel().getColumn(1).setMaxWidth(0);
+            listProducts.getColumnModel().getColumn(1).setMinWidth(0);
+            listProducts.getColumnModel().getColumn(1).setPreferredWidth(0);
+            listProducts.getColumnModel().getColumn(12).setMaxWidth(0);
+            listProducts.getColumnModel().getColumn(12).setMinWidth(0);
+            listProducts.getColumnModel().getColumn(12).setPreferredWidth(0);
+            listProducts.getColumnModel().getColumn(13).setMaxWidth(0);
+            listProducts.getColumnModel().getColumn(13).setMinWidth(0);
+            listProducts.getColumnModel().getColumn(13).setPreferredWidth(0);
+            listProducts.setDefaultEditor(Object.class, null);
             ConnectionDB c = new ConnectionDB();
             c.closeConection();
         } catch (SQLException e) {
@@ -44,7 +58,7 @@ public class RgtProducts extends javax.swing.JFrame {
     }
 
     void clearImputs() {
-        txtDescription.setText("");
+        txtTitle.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -58,9 +72,21 @@ public class RgtProducts extends javax.swing.JFrame {
         btnCloseModal = new rojerusan.RSButtonCircle();
         lblTitleModal = new javax.swing.JLabel();
         idUpdateData = new javax.swing.JLabel();
+        idTypeProducto = new javax.swing.JLabel();
         btnRegister = new rojerusan.RSButtonHover();
-        txtDescription = new RSMaterialComponent.RSTextFieldMaterial();
+        txtTitle = new RSMaterialComponent.RSTextFieldMaterial();
         btnClose = new rojerusan.RSButtonHover();
+        cbxTypeProduct = new javax.swing.JComboBox<>();
+        txtBarCode = new RSMaterialComponent.RSTextFieldMaterial();
+        txtDescription = new RSMaterialComponent.RSTextFieldMaterial();
+        txtDiscount = new RSMaterialComponent.RSTextFieldMaterial();
+        txtUtility = new RSMaterialComponent.RSTextFieldMaterial();
+        txtStock = new RSMaterialComponent.RSTextFieldMaterial();
+        txtStockMinimun = new RSMaterialComponent.RSTextFieldMaterial();
+        txtPriceShopping = new RSMaterialComponent.RSTextFieldMaterial();
+        txtPriceSales = new RSMaterialComponent.RSTextFieldMaterial();
+        checkForStock = new RSMaterialComponent.RSCheckBoxMaterial();
+        checkState = new RSMaterialComponent.RSCheckBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -88,9 +114,11 @@ public class RgtProducts extends javax.swing.JFrame {
 
         lblTitleModal.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         lblTitleModal.setForeground(new java.awt.Color(28, 60, 84));
-        lblTitleModal.setText("Registrar tipos de producto");
+        lblTitleModal.setText("Registrar Productos");
 
         idUpdateData.setText("0");
+
+        idTypeProducto.setText("0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -101,6 +129,8 @@ public class RgtProducts extends javax.swing.JFrame {
                 .addComponent(lblTitleModal, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(idUpdateData, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(idTypeProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCloseModal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -112,7 +142,8 @@ public class RgtProducts extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitleModal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCloseModal, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                    .addComponent(idUpdateData))
+                    .addComponent(idUpdateData)
+                    .addComponent(idTypeProducto))
                 .addContainerGap())
         );
 
@@ -125,17 +156,17 @@ public class RgtProducts extends javax.swing.JFrame {
             }
         });
 
-        txtDescription.setForeground(new java.awt.Color(28, 60, 84));
-        txtDescription.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtDescription.setPhColor(new java.awt.Color(28, 60, 84));
-        txtDescription.setPlaceholder("Tipo de producto");
-        txtDescription.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtTitle.setForeground(new java.awt.Color(28, 60, 84));
+        txtTitle.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtTitle.setPhColor(new java.awt.Color(28, 60, 84));
+        txtTitle.setPlaceholder("Producto");
+        txtTitle.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtTitle.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDescriptionKeyReleased(evt);
+                txtTitleKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescriptionKeyTyped(evt);
+                txtTitleKeyTyped(evt);
             }
         });
 
@@ -148,20 +179,180 @@ public class RgtProducts extends javax.swing.JFrame {
             }
         });
 
+        txtBarCode.setForeground(new java.awt.Color(28, 60, 84));
+        txtBarCode.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtBarCode.setPhColor(new java.awt.Color(28, 60, 84));
+        txtBarCode.setPlaceholder("Codigo de barra");
+        txtBarCode.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtBarCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBarCodeKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBarCodeKeyTyped(evt);
+            }
+        });
+
+        txtDescription.setForeground(new java.awt.Color(28, 60, 84));
+        txtDescription.setText("----");
+        txtDescription.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtDescription.setPhColor(new java.awt.Color(28, 60, 84));
+        txtDescription.setPlaceholder("Descripción del producto (opcional)");
+        txtDescription.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDescriptionKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDescriptionKeyTyped(evt);
+            }
+        });
+
+        txtDiscount.setForeground(new java.awt.Color(28, 60, 84));
+        txtDiscount.setText("0.00");
+        txtDiscount.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtDiscount.setPhColor(new java.awt.Color(28, 60, 84));
+        txtDiscount.setPlaceholder("Descuento");
+        txtDiscount.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDiscountKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDiscountKeyTyped(evt);
+            }
+        });
+
+        txtUtility.setForeground(new java.awt.Color(28, 60, 84));
+        txtUtility.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtUtility.setPhColor(new java.awt.Color(28, 60, 84));
+        txtUtility.setPlaceholder("Utilidad en (%)");
+        txtUtility.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtUtility.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtUtilityKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUtilityKeyTyped(evt);
+            }
+        });
+
+        txtStock.setForeground(new java.awt.Color(28, 60, 84));
+        txtStock.setText("0.00");
+        txtStock.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtStock.setPhColor(new java.awt.Color(28, 60, 84));
+        txtStock.setPlaceholder("Stock actual");
+        txtStock.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtStock.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtStockKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtStockKeyTyped(evt);
+            }
+        });
+
+        txtStockMinimun.setForeground(new java.awt.Color(28, 60, 84));
+        txtStockMinimun.setText("10");
+        txtStockMinimun.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtStockMinimun.setPhColor(new java.awt.Color(28, 60, 84));
+        txtStockMinimun.setPlaceholder("Stock minimo");
+        txtStockMinimun.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtStockMinimun.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtStockMinimunKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtStockMinimunKeyTyped(evt);
+            }
+        });
+
+        txtPriceShopping.setForeground(new java.awt.Color(28, 60, 84));
+        txtPriceShopping.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtPriceShopping.setPhColor(new java.awt.Color(28, 60, 84));
+        txtPriceShopping.setPlaceholder("Precio de compra");
+        txtPriceShopping.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtPriceShopping.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPriceShoppingKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPriceShoppingKeyTyped(evt);
+            }
+        });
+
+        txtPriceSales.setEditable(false);
+        txtPriceSales.setForeground(new java.awt.Color(28, 60, 84));
+        txtPriceSales.setText("0.00");
+        txtPriceSales.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtPriceSales.setPhColor(new java.awt.Color(28, 60, 84));
+        txtPriceSales.setPlaceholder("Precio de venta");
+        txtPriceSales.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtPriceSales.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPriceSalesKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPriceSalesKeyTyped(evt);
+            }
+        });
+
+        checkForStock.setForeground(new java.awt.Color(28, 60, 84));
+        checkForStock.setSelected(true);
+        checkForStock.setText("Venta con stock (si)");
+        checkForStock.setColorCheck(new java.awt.Color(28, 60, 84));
+        checkForStock.setColorUnCheck(new java.awt.Color(53, 209, 112));
+        checkForStock.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                checkForStockItemStateChanged(evt);
+            }
+        });
+
+        checkState.setForeground(new java.awt.Color(28, 60, 84));
+        checkState.setSelected(true);
+        checkState.setText("Estado del producto activo");
+        checkState.setColorCheck(new java.awt.Color(28, 60, 84));
+        checkState.setColorUnCheck(new java.awt.Color(53, 209, 112));
+        checkState.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                checkStateItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBackgroundLayout = new javax.swing.GroupLayout(panelBackground);
         panelBackground.setLayout(panelBackgroundLayout);
         panelBackgroundLayout.setHorizontalGroup(
             panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelBackgroundLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBackgroundLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBackgroundLayout.createSequentialGroup()
+                        .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtUtility, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(txtBarCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBackgroundLayout.createSequentialGroup()
+                                .addComponent(checkForStock, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBackgroundLayout.createSequentialGroup()
+                                .addComponent(txtPriceShopping, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtPriceSales, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(txtDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(checkState, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBackgroundLayout.createSequentialGroup()
+                                .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtStockMinimun, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbxTypeProduct, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBackgroundLayout.createSequentialGroup()
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelBackgroundLayout.setVerticalGroup(
@@ -169,7 +360,28 @@ public class RgtProducts extends javax.swing.JFrame {
             .addGroup(panelBackgroundLayout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUtility, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStockMinimun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtPriceShopping, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPriceSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbxTypeProduct))
+                .addGap(18, 18, 18)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkForStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,6 +409,7 @@ public class RgtProducts extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 155;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         getContentPane().add(panelRound1, gridBagConstraints);
@@ -216,43 +429,59 @@ public class RgtProducts extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         
-        if(txtDescription.getText().length() <= 2){
+        if(txtTitle.getText().length() <= 2){
             new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL TIPO DE PRODUCTO",
                         5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                         RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             return;
         }
-        ControllerTypeproduct cTypeProduct = new ControllerTypeproduct();
-        ModelTypeProduct mTypeProduct = new ModelTypeProduct();
+        ControllerProducts cProducts = new ControllerProducts();
+        ModelProducts mProducts = new ModelProducts();
         
-        mTypeProduct.setDescription(txtDescription.getText());
+        mProducts.setIdTypeProduct(3);
+//        mProducts.setIdTypeProduct(Integer.parseInt(idTypeProducto.getText()));
+        mProducts.setBarCode(txtBarCode.getText());
+        mProducts.setTitle(txtTitle.getText());
+        mProducts.setDescription(txtDescription.getText());
+        mProducts.setDiscount(Float.parseFloat(txtDiscount.getText()));
+        mProducts.setUtility(Float.parseFloat(txtUtility.getText()));
+        mProducts.setStock(Integer.parseInt(txtStock.getText()));
+        mProducts.setStockMinimun(Integer.parseInt(txtStockMinimun.getText()));
+        mProducts.setPriceShopping(Double.parseDouble(txtPriceShopping.getText()));
+        mProducts.setPriceSale(Double.parseDouble(txtPriceSales.getText()));
+        
+        if(checkForStock.isSelected()) {
+            mProducts.setState(true);
+        } else {
+            mProducts.setState(false);
+        }
         
         try {
             if(accion.equals("savedata")) {
-                if (cTypeProduct.insertTypeProduct(mTypeProduct)) {
-                    new rojerusan.RSNotifyAnimated("FELICIDADES", "HAS REGISTRADO UN TIPO DE PRODUCTO CON LA DESCRIPCIÓN DE " + txtDescription.getText(),
+                if (cProducts.insertProducts(mProducts)) {
+                    new rojerusan.RSNotifyAnimated("FELICIDADES", "HAS REGISTRADO UN PRODUCTO CON EL NOMBRE DE " + txtTitle.getText(),
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
-                    getTypeProduct();
+                    getProducts();
                     ConnectionDB cn = new ConnectionDB();
                     cn.closeConection();
                     clearImputs();
                 } else {
-                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO REGISTRAR EL TIPO DE PRODUCTO, INTENTALO MAS TARDE",
+                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO REGISTRAR EL PRODUCTO, INTENTALO MAS TARDE",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
                 }
             } else if(accion.equals("updatedata")) {
-                mTypeProduct.setId(Integer.parseInt(idUpdateData.getText()));
-                if (cTypeProduct.updateTypeProduct(mTypeProduct)) {
-                    new rojerusan.RSNotifyAnimated("FELICIDADES", "LOS DATOS DEL TIPO DE PRODUCTO" + txtDescription.getText() + "SE HAN ACTUALIZADO CON ÉXITO",
+                mProducts.setId(Integer.parseInt(idUpdateData.getText()));
+                if (cProducts.updateProducts(mProducts)) {
+                    new rojerusan.RSNotifyAnimated("FELICIDADES", "LOS DATOS DEL PRODUCTO" + txtTitle.getText() + "SE HAN ACTUALIZADO CON ÉXITO",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
-                    getTypeProduct();
+                    getProducts();
                     ConnectionDB cn = new ConnectionDB();
                     cn.closeConection();
                 } else {
-                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ACTUALIZAR LOS DATOS DEL TIPO DE PRODUCTO, INTENTALO MAS TARDE",
+                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ACTUALIZAR LOS DATOS DEL PRODUCTO, INTENTALO MAS TARDE",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
                 }
@@ -264,17 +493,97 @@ public class RgtProducts extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void txtTitleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTitleKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTitleKeyReleased
+
+    private void txtTitleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTitleKeyTyped
+
+    }//GEN-LAST:event_txtTitleKeyTyped
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void txtBarCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBarCodeKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBarCodeKeyReleased
+
+    private void txtBarCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBarCodeKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBarCodeKeyTyped
+
     private void txtDescriptionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescriptionKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescriptionKeyReleased
 
     private void txtDescriptionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescriptionKeyTyped
-
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtDescriptionKeyTyped
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnCloseActionPerformed
+    private void txtDiscountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDiscountKeyReleased
+
+    private void txtDiscountKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDiscountKeyTyped
+
+    private void txtUtilityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUtilityKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUtilityKeyReleased
+
+    private void txtUtilityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUtilityKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUtilityKeyTyped
+
+    private void txtStockKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockKeyReleased
+
+    private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockKeyTyped
+
+    private void txtStockMinimunKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockMinimunKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockMinimunKeyReleased
+
+    private void txtStockMinimunKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockMinimunKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockMinimunKeyTyped
+
+    private void txtPriceShoppingKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceShoppingKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceShoppingKeyReleased
+
+    private void txtPriceShoppingKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceShoppingKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceShoppingKeyTyped
+
+    private void txtPriceSalesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceSalesKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceSalesKeyReleased
+
+    private void txtPriceSalesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceSalesKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceSalesKeyTyped
+
+    private void checkForStockItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkForStockItemStateChanged
+        if(checkForStock.isSelected()) {
+            checkForStock.setText("Venta con stock (si)");
+        } else {
+            checkForStock.setText("Venta con stock (no)");            
+        }
+    }//GEN-LAST:event_checkForStockItemStateChanged
+
+    private void checkStateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkStateItemStateChanged
+        if(checkState.isSelected()) {
+            checkState.setText("Estado del producto activo");
+        } else {
+            checkState.setText("Estado del producto inactivo");
+        }
+    }//GEN-LAST:event_checkStateItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -16698,12 +17007,24 @@ public class RgtProducts extends javax.swing.JFrame {
     public static rojerusan.RSButtonHover btnClose;
     private rojerusan.RSButtonCircle btnCloseModal;
     public static rojerusan.RSButtonHover btnRegister;
+    public static javax.swing.JComboBox<cbxTypeProducts> cbxTypeProduct;
+    public static RSMaterialComponent.RSCheckBoxMaterial checkForStock;
+    public static RSMaterialComponent.RSCheckBoxMaterial checkState;
+    public static javax.swing.JLabel idTypeProducto;
     public static javax.swing.JLabel idUpdateData;
     private javax.swing.JPanel jPanel2;
     public static javax.swing.JLabel lblTitleModal;
     private javax.swing.JPanel panelBackground;
     private main.PanelRound panelRound1;
+    public static RSMaterialComponent.RSTextFieldMaterial txtBarCode;
     public static RSMaterialComponent.RSTextFieldMaterial txtDescription;
+    public static RSMaterialComponent.RSTextFieldMaterial txtDiscount;
+    public static RSMaterialComponent.RSTextFieldMaterial txtPriceSales;
+    public static RSMaterialComponent.RSTextFieldMaterial txtPriceShopping;
+    public static RSMaterialComponent.RSTextFieldMaterial txtStock;
+    public static RSMaterialComponent.RSTextFieldMaterial txtStockMinimun;
+    public static RSMaterialComponent.RSTextFieldMaterial txtTitle;
+    public static RSMaterialComponent.RSTextFieldMaterial txtUtility;
     // End of variables declaration//GEN-END:variables
 
     class backgorundPanels extends JPanel {
