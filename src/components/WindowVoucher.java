@@ -1,50 +1,41 @@
 package components;
 
-import componentsregistry.RgtProducts;
-import controller.ControllerProducts;
+import componentsregistry.RgtVoucher;
+import controller.ControllerVoucher;
 import database.ConnectionDB;
 import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.ModelProducts;
+import model.ModelVoucher;
 import rojerusan.RSNotifyAnimated;
 
-public class WindowProducts extends javax.swing.JPanel {
-    
-    public WindowProducts() {
+public class WindowVoucher extends javax.swing.JPanel {
+
+    public WindowVoucher() {
         initComponents();
         idUpdateData.setVisible(false);
         jScrollPane1.getViewport().setBackground(new Color(241, 246, 249));
-        getProducts("");
+        getVoucher("");
     }
-    
-    void getProducts(String search) {
-        ControllerProducts cProducts = new ControllerProducts();
+
+    void getVoucher(String search) {
+        ControllerVoucher cVoucher = new ControllerVoucher();
         try {
             DefaultTableModel model;
-            model = cProducts.getProducts(search);
-            listProducts.setModel(model);
-            listProducts.getColumnModel().getColumn(0).setMaxWidth(0);
-            listProducts.getColumnModel().getColumn(0).setMinWidth(0);
-            listProducts.getColumnModel().getColumn(0).setPreferredWidth(0);
-            listProducts.getColumnModel().getColumn(1).setMaxWidth(0);
-            listProducts.getColumnModel().getColumn(1).setMinWidth(0);
-            listProducts.getColumnModel().getColumn(1).setPreferredWidth(0);
-            listProducts.getColumnModel().getColumn(12).setMaxWidth(0);
-            listProducts.getColumnModel().getColumn(12).setMinWidth(0);
-            listProducts.getColumnModel().getColumn(12).setPreferredWidth(0);
-            listProducts.getColumnModel().getColumn(13).setMaxWidth(0);
-            listProducts.getColumnModel().getColumn(13).setMinWidth(0);
-            listProducts.getColumnModel().getColumn(13).setPreferredWidth(0);
-            listProducts.setDefaultEditor(Object.class, null);
+            model = cVoucher.getVoucher(search);
+            listVoucher.setModel(model);
+            listVoucher.getColumnModel().getColumn(0).setMaxWidth(0);
+            listVoucher.getColumnModel().getColumn(0).setMinWidth(0);
+            listVoucher.getColumnModel().getColumn(0).setPreferredWidth(0);
+            listVoucher.setDefaultEditor(Object.class, null);
             ConnectionDB c = new ConnectionDB();
             c.closeConection();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -56,18 +47,18 @@ public class WindowProducts extends javax.swing.JPanel {
         btnDelete = new rojerusan.RSButtonIconI();
         txtSearch = new RSMaterialComponent.RSTextFieldIconDos();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listProducts = new rojerusan.RSTableMetro();
+        listVoucher = new rojerusan.RSTableMetro();
         jLabel2 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(241, 246, 249));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(28, 60, 84));
-        jLabel1.setText("Productos >");
+        jLabel1.setText("Comprobantes  >");
 
         btnRegister.setBackground(new java.awt.Color(13, 110, 253));
         btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/add.png"))); // NOI18N
-        btnRegister.setToolTipText("REGISTRAR USUARIOS");
+        btnRegister.setToolTipText("REGISTRAR COMPROBANTES");
         btnRegister.setColorHover(new java.awt.Color(28, 119, 255));
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,7 +68,7 @@ public class WindowProducts extends javax.swing.JPanel {
 
         btnDelete.setBackground(new java.awt.Color(238, 111, 111));
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete.png"))); // NOI18N
-        btnDelete.setToolTipText("ELIMINAR USUARIOS");
+        btnDelete.setToolTipText("ELIMINAR COMPROBANTES");
         btnDelete.setColorHover(new java.awt.Color(237, 90, 90));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +80,7 @@ public class WindowProducts extends javax.swing.JPanel {
         txtSearch.setBorderColor(new java.awt.Color(28, 60, 84));
         txtSearch.setColorIcon(new java.awt.Color(28, 60, 84));
         txtSearch.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
-        txtSearch.setPlaceholder("Buscar por nombre de suario");
+        txtSearch.setPlaceholder("Buscar por nombre");
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtSearchKeyTyped(evt);
@@ -101,9 +92,9 @@ public class WindowProducts extends javax.swing.JPanel {
         jScrollPane1.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        listProducts.setBackground(new java.awt.Color(255, 255, 255));
-        listProducts.setForeground(new java.awt.Color(255, 255, 255));
-        listProducts.setModel(new javax.swing.table.DefaultTableModel(
+        listVoucher.setBackground(new java.awt.Color(255, 255, 255));
+        listVoucher.setForeground(new java.awt.Color(255, 255, 255));
+        listVoucher.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -114,46 +105,44 @@ public class WindowProducts extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        listProducts.setAltoHead(40);
-        listProducts.setColorBackgoundHead(new java.awt.Color(241, 246, 249));
-        listProducts.setColorBordeFilas(new java.awt.Color(212, 227, 236));
-        listProducts.setColorBordeHead(new java.awt.Color(212, 227, 236));
-        listProducts.setColorFilasBackgound1(new java.awt.Color(241, 246, 249));
-        listProducts.setColorFilasBackgound2(new java.awt.Color(215, 229, 237));
-        listProducts.setColorFilasForeground1(new java.awt.Color(28, 60, 84));
-        listProducts.setColorFilasForeground2(new java.awt.Color(36, 58, 74));
-        listProducts.setColorForegroundHead(new java.awt.Color(28, 60, 84));
-        listProducts.setColorSelBackgound(new java.awt.Color(13, 110, 253));
-        listProducts.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        listProducts.setFuenteFilas(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        listProducts.setFuenteHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        listProducts.setGridColor(new java.awt.Color(219, 221, 231));
-        listProducts.setGrosorBordeFilas(0);
-        listProducts.setMultipleSeleccion(false);
-        listProducts.setRowHeight(30);
-        listProducts.setSelectionBackground(new java.awt.Color(53, 209, 112));
-        listProducts.getTableHeader().setReorderingAllowed(false);
-        listProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+        listVoucher.setColorBackgoundHead(new java.awt.Color(241, 246, 249));
+        listVoucher.setColorBordeFilas(new java.awt.Color(212, 227, 236));
+        listVoucher.setColorBordeHead(new java.awt.Color(212, 227, 236));
+        listVoucher.setColorFilasBackgound1(new java.awt.Color(241, 246, 249));
+        listVoucher.setColorFilasBackgound2(new java.awt.Color(215, 229, 237));
+        listVoucher.setColorFilasForeground1(new java.awt.Color(28, 60, 84));
+        listVoucher.setColorFilasForeground2(new java.awt.Color(36, 58, 74));
+        listVoucher.setColorForegroundHead(new java.awt.Color(28, 60, 84));
+        listVoucher.setColorSelBackgound(new java.awt.Color(13, 110, 253));
+        listVoucher.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
+        listVoucher.setFuenteFilas(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        listVoucher.setGridColor(new java.awt.Color(219, 221, 231));
+        listVoucher.setGrosorBordeFilas(0);
+        listVoucher.setMultipleSeleccion(false);
+        listVoucher.setRowHeight(40);
+        listVoucher.setSelectionBackground(new java.awt.Color(53, 209, 112));
+        listVoucher.getTableHeader().setReorderingAllowed(false);
+        listVoucher.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                listProductsMouseClicked(evt);
+                listVoucherMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                listProductsMouseEntered(evt);
+                listVoucherMouseEntered(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                listProductsMousePressed(evt);
+                listVoucherMousePressed(evt);
             }
         });
-        listProducts.addKeyListener(new java.awt.event.KeyAdapter() {
+        listVoucher.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                listProductsKeyPressed(evt);
+                listVoucherKeyPressed(evt);
             }
         });
-        jScrollPane1.setViewportView(listProducts);
+        jScrollPane1.setViewportView(listVoucher);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(25, 158, 255));
-        jLabel2.setText("Mantenimiento de productos");
+        jLabel2.setText("Mantenimiento de comprobantes");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -215,80 +204,65 @@ public class WindowProducts extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        RgtProducts modal = new RgtProducts();
+        RgtVoucher modal = new RgtVoucher();
         modal.setVisible(true);
+        modal.accion = "savedata";
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (!idUpdateData.getText().equals("")) {
-            int fila = listProducts.getSelectedRow();
-            ControllerProducts cProducts = new ControllerProducts();
-            ModelProducts mProducts = new ModelProducts();
-            mProducts.setId(Integer.parseInt(idUpdateData.getText()));
-            if(cProducts.deleteProducts(mProducts)) {
-                new rojerusan.RSNotifyAnimated("SUCCESS", "HEMOS ELIMINADO EL PRODUCTO "+listProducts.getValueAt(fila, 1).toString(),
-                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-                    RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
+            int fila = listVoucher.getSelectedRow();
+            ControllerVoucher cVoucher = new ControllerVoucher();
+            ModelVoucher mVoucher = new ModelVoucher();
+            mVoucher.setId(Integer.parseInt(idUpdateData.getText()));
+            if (cVoucher.deleteVoucher(mVoucher)) {
+                new rojerusan.RSNotifyAnimated("SUCCESS", "HEMOS ELIMINADO EL COMPROBANTE" + listVoucher.getValueAt(fila, 1).toString(),
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
             } else {
-                new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ELIMINAR EL PRODUCTO"+listProducts.getValueAt(fila, 1).toString(),
-                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ELIMINAR EL COMPROBANTE",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             }
-            getProducts("");
+            getVoucher("");
         } else {
-            new rojerusan.RSNotifyAnimated("ERROR", "SOLICITUD DENEGADA, USTED NO SELECCIONÓ EL PRODUCTO PARA ELIMINAR, SELECCIONA UNO Y VUELVE A INTENTARLO DE NUEVO",
+            new rojerusan.RSNotifyAnimated("ERROR", "SOLICITUD DENEGADA, USTED NO SELECCIONÓ EL COMPROBANTE PARA ELIMINAR, SELECCIONA UNO Y VUELVE A INTENTARLO DE NUEVO",
                     5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                     RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void listProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listProductsMouseClicked
-        int fila = listProducts.getSelectedRow();
-        idUpdateData.setText(listProducts.getValueAt(fila, 0).toString());
-    }//GEN-LAST:event_listProductsMouseClicked
+    private void listVoucherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listVoucherMouseClicked
+        int fila = listVoucher.getSelectedRow();
+        idUpdateData.setText(listVoucher.getValueAt(fila, 0).toString());
+    }//GEN-LAST:event_listVoucherMouseClicked
 
-    private void listProductsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listProductsMousePressed
+    private void listVoucherMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listVoucherMousePressed
         if (evt.getClickCount() == 2) {
-            int fila = listProducts.getSelectedRow();
-            RgtProducts modal = new RgtProducts();
+            int fila = listVoucher.getSelectedRow();
+            RgtVoucher modal = new RgtVoucher();
             modal.setVisible(true);
-            modal.idUpdateData.setText(listProducts.getValueAt(fila, 0).toString());
-            modal.txtTitle.setText(listProducts.getValueAt(fila, 3).toString());
-            modal.txtDescription.setText(listProducts.getValueAt(fila, 4).toString());
-            modal.txtBarCode.setText(listProducts.getValueAt(fila, 2).toString());
-            modal.txtDiscount.setText(listProducts.getValueAt(fila, 6).toString());
-            modal.txtUtility.setText(listProducts.getValueAt(fila, 7).toString());
-            modal.txtStock.setText(listProducts.getValueAt(fila, 8).toString());
-            modal.txtStockMinimun.setText(listProducts.getValueAt(fila, 9).toString());
-            modal.txtPriceShopping.setText(listProducts.getValueAt(fila, 10).toString());
-            modal.txtPriceSales.setText(listProducts.getValueAt(fila, 11).toString());
-            if(listProducts.getValueAt(fila, 12).toString().equals("NO")) {
-                modal.checkForStock.setSelected(false);
-                modal.checkForStock.setText("Venta con stock (no)");
-            }
-            if(listProducts.getValueAt(fila, 13).toString().equals("INACTIVO")) {
-                modal.checkState.setSelected(false);
-                modal.checkState.setText("Estado del producto inactivo");
-            }
-            modal.cbxTypeProduct.setEnabled(false);
-            
+            modal.idUpdateData.setText(listVoucher.getValueAt(fila, 0).toString());
+            modal.txtVoucher.setText(listVoucher.getValueAt(fila, 1).toString());
+            modal.txtSerie.setText(listVoucher.getValueAt(fila, 2).toString());
+            modal.txtNumberStart.setText(listVoucher.getValueAt(fila, 3).toString());
+            modal.txtNumberCurrent.setText(listVoucher.getValueAt(fila, 4).toString());
+            modal.txtNumberEnd.setText(listVoucher.getValueAt(fila, 5).toString());
+
             modal.accion = "updatedata";
             modal.btnRegister.setText("MODIFICAR DATOS");
         }
-    }//GEN-LAST:event_listProductsMousePressed
+    }//GEN-LAST:event_listVoucherMousePressed
 
-    private void listProductsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listProductsKeyPressed
-//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//           
-//        }
-    }//GEN-LAST:event_listProductsKeyPressed
+    private void listVoucherKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listVoucherKeyPressed
+    }//GEN-LAST:event_listVoucherKeyPressed
 
-    private void listProductsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listProductsMouseEntered
+    private void listVoucherMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listVoucherMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_listProductsMouseEntered
+    }//GEN-LAST:event_listVoucherMouseEntered
 
     private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
-        getProducts(txtSearch.getText());
+        getVoucher(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyTyped
 
 
@@ -300,7 +274,7 @@ public class WindowProducts extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    public static rojerusan.RSTableMetro listProducts;
+    public static rojerusan.RSTableMetro listVoucher;
     private RSMaterialComponent.RSTextFieldIconDos txtSearch;
     // End of variables declaration//GEN-END:variables
 }

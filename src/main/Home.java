@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import maincomponents.Company;
+import maincomponents.Customer;
+import maincomponents.Setting;
+import maincomponents.Shopping;
 import maincomponents.Store;
 import maincomponents.Users;
 
@@ -626,8 +630,7 @@ public class Home extends javax.swing.JFrame {
         mnuCompany.setBackground(new Color(238,240,241));
         mnuSetting.setColorText(new Color(76,76,76));
         mnuSetting.setBackground(new Color(238,240,241));
-//        new ChangePanel(PrincipalHomes, new Users());
-//        cLogin.loginAccessUsers(idUserLogin.getText());
+        new ChangePanel(PrincipalHomes, new Customer());
         lblTitleHome.setText("Usuarios y personal");
     }//GEN-LAST:event_mnuCustomerActionPerformed
 
@@ -677,9 +680,8 @@ public class Home extends javax.swing.JFrame {
         mnuCustomer.setBackground(new Color(238,240,241));
         mnuSetting.setColorText(new Color(76,76,76));
         mnuSetting.setBackground(new Color(238,240,241));
-//        new ChangePanel(PrincipalHomes, new Company());
-//        cLogin.loginAccessCompany(idUserLogin.getText());
-        lblTitleHome.setText("Empresas y sucursales");
+        new ChangePanel(PrincipalHomes, new Company());
+        lblTitleHome.setText("Empresa");
 
     }//GEN-LAST:event_mnuCompanyActionPerformed
 
@@ -704,8 +706,7 @@ public class Home extends javax.swing.JFrame {
         mnuCompany.setBackground(new Color(238,240,241));
         mnuCustomer.setColorText(new Color(76,76,76));
         mnuCustomer.setBackground(new Color(238,240,241));
-//        new ChangePanel(PrincipalHomes, new Configurations());
-//        cLogin.loginAccessConfigurations(idUserLogin.getText());
+        new ChangePanel(PrincipalHomes, new Setting());
         lblTitleHome.setText("Configuraciones");
     }//GEN-LAST:event_mnuSettingActionPerformed
 
@@ -799,9 +800,8 @@ public class Home extends javax.swing.JFrame {
         mnuCustomer.setBackground(new Color(238,240,241));
         mnuSetting.setColorText(new Color(76,76,76));
         mnuSetting.setBackground(new Color(238,240,241));
-//        new ChangePanel(PrincipalHomes, new Shopping());
-//        cLogin.loginAccessShopping(idUserLogin.getText());
-//        lblTitleHome.setText("Compras y ordenes de compra");
+        new ChangePanel(PrincipalHomes, new Shopping());
+        lblTitleHome.setText("Compras y proveedores");
     }//GEN-LAST:event_mnuShoppingActionPerformed
 
     private void mnuUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsersActionPerformed

@@ -313,6 +313,9 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbxTypeProductItemStateChanged"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;cbxTypeProducts&gt;"/>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
@@ -372,14 +375,14 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="54" green="3c" red="1c" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.00"/>
+                <Property name="text" type="java.lang.String" value="0"/>
                 <Property name="colorMaterial" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="8f" green="d5" red="65" type="rgb"/>
                 </Property>
                 <Property name="phColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="54" green="3c" red="1c" type="rgb"/>
                 </Property>
-                <Property name="placeholder" type="java.lang.String" value="Descuento"/>
+                <Property name="placeholder" type="java.lang.String" value="Descuento (%)"/>
                 <Property name="selectionColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ee" green="5f" red="75" type="rgb"/>
                 </Property>
@@ -397,6 +400,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="54" green="3c" red="1c" type="rgb"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="0"/>
                 <Property name="colorMaterial" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="8f" green="d5" red="65" type="rgb"/>
                 </Property>
@@ -409,6 +413,7 @@
                 </Property>
               </Properties>
               <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUtilityKeyPressed"/>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUtilityKeyReleased"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUtilityKeyTyped"/>
               </Events>
@@ -421,7 +426,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="54" green="3c" red="1c" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.00"/>
+                <Property name="text" type="java.lang.String" value="0"/>
                 <Property name="colorMaterial" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="8f" green="d5" red="65" type="rgb"/>
                 </Property>
@@ -471,6 +476,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="54" green="3c" red="1c" type="rgb"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="0.00"/>
                 <Property name="colorMaterial" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="8f" green="d5" red="65" type="rgb"/>
                 </Property>
@@ -483,6 +489,7 @@
                 </Property>
               </Properties>
               <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPriceShoppingKeyPressed"/>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPriceShoppingKeyReleased"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPriceShoppingKeyTyped"/>
               </Events>

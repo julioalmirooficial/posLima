@@ -1,12 +1,13 @@
 package maincomponents;
 
+import components.WindowSupplier;
 import components.WindowUser;
 import controllerpublic.ChangePanel;
 import java.awt.Color;
 
-public class Users extends javax.swing.JPanel {
+public class Shopping extends javax.swing.JPanel {
 
-    public Users() {
+    public Shopping() {
         initComponents();
     }
 
@@ -16,43 +17,43 @@ public class Users extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        subMenuUsuarios = new rojerusan.RSButtonIconI();
-        subMenuPagosAlPersonal = new rojerusan.RSButtonIconI();
+        subMenuShopping = new rojerusan.RSButtonIconI();
+        subMenuSupplier = new rojerusan.RSButtonIconI();
         mainDesktop = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(241, 246, 249));
 
         jPanel2.setBackground(new java.awt.Color(241, 246, 249));
 
-        subMenuUsuarios.setBackground(new java.awt.Color(241, 246, 249));
-        subMenuUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/users-registry.png"))); // NOI18N
-        subMenuUsuarios.setText("Usuarios");
-        subMenuUsuarios.setColorHover(new java.awt.Color(226, 236, 242));
-        subMenuUsuarios.setColorText(new java.awt.Color(28, 60, 84));
-        subMenuUsuarios.setColorTextHover(new java.awt.Color(44, 88, 120));
-        subMenuUsuarios.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        subMenuUsuarios.addActionListener(new java.awt.event.ActionListener() {
+        subMenuShopping.setBackground(new java.awt.Color(241, 246, 249));
+        subMenuShopping.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/shopping-product.png"))); // NOI18N
+        subMenuShopping.setText("Compras");
+        subMenuShopping.setColorHover(new java.awt.Color(226, 236, 242));
+        subMenuShopping.setColorText(new java.awt.Color(28, 60, 84));
+        subMenuShopping.setColorTextHover(new java.awt.Color(44, 88, 120));
+        subMenuShopping.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        subMenuShopping.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subMenuUsuariosActionPerformed(evt);
+                subMenuShoppingActionPerformed(evt);
             }
         });
 
-        subMenuPagosAlPersonal.setBackground(new java.awt.Color(241, 246, 249));
-        subMenuPagosAlPersonal.setForeground(new java.awt.Color(28, 60, 84));
-        subMenuPagosAlPersonal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/check.png"))); // NOI18N
-        subMenuPagosAlPersonal.setText("Pagos");
-        subMenuPagosAlPersonal.setColorHover(new java.awt.Color(226, 236, 242));
-        subMenuPagosAlPersonal.setColorText(new java.awt.Color(28, 60, 84));
-        subMenuPagosAlPersonal.setColorTextHover(new java.awt.Color(44, 88, 120));
-        subMenuPagosAlPersonal.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        subMenuPagosAlPersonal.addMouseListener(new java.awt.event.MouseAdapter() {
+        subMenuSupplier.setBackground(new java.awt.Color(241, 246, 249));
+        subMenuSupplier.setForeground(new java.awt.Color(28, 60, 84));
+        subMenuSupplier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/proveedor.png"))); // NOI18N
+        subMenuSupplier.setText("Proveedores");
+        subMenuSupplier.setColorHover(new java.awt.Color(226, 236, 242));
+        subMenuSupplier.setColorText(new java.awt.Color(28, 60, 84));
+        subMenuSupplier.setColorTextHover(new java.awt.Color(44, 88, 120));
+        subMenuSupplier.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        subMenuSupplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                subMenuPagosAlPersonalMouseClicked(evt);
+                subMenuSupplierMouseClicked(evt);
             }
         });
-        subMenuPagosAlPersonal.addActionListener(new java.awt.event.ActionListener() {
+        subMenuSupplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subMenuPagosAlPersonalActionPerformed(evt);
+                subMenuSupplierActionPerformed(evt);
             }
         });
 
@@ -62,18 +63,18 @@ public class Users extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(subMenuUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(subMenuShopping, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(subMenuPagosAlPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1016, Short.MAX_VALUE))
+                .addComponent(subMenuSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(976, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(subMenuUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(subMenuPagosAlPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(subMenuShopping, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(subMenuSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -108,28 +109,28 @@ public class Users extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void subMenuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuUsuariosActionPerformed
-        subMenuUsuarios.setBackground(new Color(226, 236, 242));
-        subMenuPagosAlPersonal.setBackground(new Color(241, 246, 249));
+    private void subMenuShoppingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuShoppingActionPerformed
+        subMenuShopping.setBackground(new Color(226, 236, 242));
+        subMenuSupplier.setBackground(new Color(241, 246, 249));
         new ChangePanel(mainDesktop, new WindowUser());
-    }//GEN-LAST:event_subMenuUsuariosActionPerformed
+    }//GEN-LAST:event_subMenuShoppingActionPerformed
 
-    private void subMenuPagosAlPersonalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subMenuPagosAlPersonalMouseClicked
+    private void subMenuSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subMenuSupplierMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_subMenuPagosAlPersonalMouseClicked
+    }//GEN-LAST:event_subMenuSupplierMouseClicked
 
-    private void subMenuPagosAlPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuPagosAlPersonalActionPerformed
-        subMenuPagosAlPersonal.setBackground(new Color(226, 236, 242));
-        subMenuUsuarios.setBackground(new Color(241, 246, 249));
-//        new ChangePanel(mainDesktop, new WindowPaymentUser());
-    }//GEN-LAST:event_subMenuPagosAlPersonalActionPerformed
+    private void subMenuSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuSupplierActionPerformed
+        subMenuSupplier.setBackground(new Color(226, 236, 242));
+        subMenuShopping.setBackground(new Color(241, 246, 249));
+        new ChangePanel(mainDesktop, new WindowSupplier());
+    }//GEN-LAST:event_subMenuSupplierActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel mainDesktop;
-    public static rojerusan.RSButtonIconI subMenuPagosAlPersonal;
-    public static rojerusan.RSButtonIconI subMenuUsuarios;
+    public static rojerusan.RSButtonIconI subMenuShopping;
+    public static rojerusan.RSButtonIconI subMenuSupplier;
     // End of variables declaration//GEN-END:variables
 }

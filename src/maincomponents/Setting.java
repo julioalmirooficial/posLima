@@ -1,12 +1,12 @@
 package maincomponents;
 
-import components.WindowCompany;
+import components.WindowVoucher;
 import controllerpublic.ChangePanel;
 import java.awt.Color;
 
-public class Company extends javax.swing.JPanel {
+public class Setting extends javax.swing.JPanel {
 
-    public Company() {
+    public Setting() {
         initComponents();
     }
 
@@ -16,23 +16,23 @@ public class Company extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        subMenuCompany = new rojerusan.RSButtonIconI();
+        subMenuVoucher = new rojerusan.RSButtonIconI();
         mainDesktop = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(241, 246, 249));
 
         jPanel2.setBackground(new java.awt.Color(241, 246, 249));
 
-        subMenuCompany.setBackground(new java.awt.Color(241, 246, 249));
-        subMenuCompany.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/proveedor.png"))); // NOI18N
-        subMenuCompany.setText("Empresa");
-        subMenuCompany.setColorHover(new java.awt.Color(226, 236, 242));
-        subMenuCompany.setColorText(new java.awt.Color(28, 60, 84));
-        subMenuCompany.setColorTextHover(new java.awt.Color(44, 88, 120));
-        subMenuCompany.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        subMenuCompany.addActionListener(new java.awt.event.ActionListener() {
+        subMenuVoucher.setBackground(new java.awt.Color(241, 246, 249));
+        subMenuVoucher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/tipo-comprobante.png"))); // NOI18N
+        subMenuVoucher.setText("Configuració de comprobantes");
+        subMenuVoucher.setColorHover(new java.awt.Color(226, 236, 242));
+        subMenuVoucher.setColorText(new java.awt.Color(28, 60, 84));
+        subMenuVoucher.setColorTextHover(new java.awt.Color(44, 88, 120));
+        subMenuVoucher.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        subMenuVoucher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subMenuCompanyActionPerformed(evt);
+                subMenuVoucherActionPerformed(evt);
             }
         });
 
@@ -42,14 +42,14 @@ public class Company extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(subMenuCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1110, Short.MAX_VALUE))
+                .addComponent(subMenuVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(994, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(subMenuCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(subMenuVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -84,16 +84,16 @@ public class Company extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void subMenuCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCompanyActionPerformed
-        subMenuCompany.setBackground(new Color(226, 236, 242));
-        new ChangePanel(mainDesktop, new WindowCompany());
-    }//GEN-LAST:event_subMenuCompanyActionPerformed
+    private void subMenuVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuVoucherActionPerformed
+        subMenuVoucher.setBackground(new Color(226, 236, 242));
+        new ChangePanel(mainDesktop, new WindowVoucher());
+    }//GEN-LAST:event_subMenuVoucherActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel mainDesktop;
-    public static rojerusan.RSButtonIconI subMenuCompany;
+    public static rojerusan.RSButtonIconI subMenuVoucher;
     // End of variables declaration//GEN-END:variables
 }

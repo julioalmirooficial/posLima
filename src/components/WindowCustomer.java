@@ -1,36 +1,33 @@
 package components;
 
-import componentsregistry.RgtUser;
-import controller.ControllerUser;
+import componentsregistry.RgtCustomer;
+import controller.ControllerCustomer;
 import database.ConnectionDB;
 import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.ModelUser;
+import model.ModelCustomer;
 import rojerusan.RSNotifyAnimated;
 
-public class WindowUser extends javax.swing.JPanel {
+public class WindowCustomer extends javax.swing.JPanel {
     
-    public WindowUser() {
+    public WindowCustomer() {
         initComponents();
         idUpdateData.setVisible(false);
         jScrollPane1.getViewport().setBackground(new Color(241, 246, 249));
-        getUser("");
+        getCustomer("");
     }
     
-    void getUser(String search) {
-        ControllerUser cUser = new ControllerUser();
+    void getCustomer(String search) {
+        ControllerCustomer cCustomer = new ControllerCustomer();
         try {
             DefaultTableModel model;
-            model = cUser.getUser(search);
+            model = cCustomer.getCustomer(search);
             listUser.setModel(model);
             listUser.getColumnModel().getColumn(0).setMaxWidth(0);
             listUser.getColumnModel().getColumn(0).setMinWidth(0);
             listUser.getColumnModel().getColumn(0).setPreferredWidth(0);
-            listUser.getColumnModel().getColumn(3).setMaxWidth(0);
-            listUser.getColumnModel().getColumn(3).setMinWidth(0);
-            listUser.getColumnModel().getColumn(3).setPreferredWidth(0);
             listUser.setDefaultEditor(Object.class, null);
             ConnectionDB c = new ConnectionDB();
             c.closeConection();
@@ -52,12 +49,13 @@ public class WindowUser extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         listUser = new rojerusan.RSTableMetro();
         jLabel2 = new javax.swing.JLabel();
+        btnDelete1 = new rojerusan.RSButtonIconI();
 
         jPanel1.setBackground(new java.awt.Color(241, 246, 249));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(28, 60, 84));
-        jLabel1.setText("Usuarios >");
+        jLabel1.setText("Clientes >");
 
         btnRegister.setBackground(new java.awt.Color(13, 110, 253));
         btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/add.png"))); // NOI18N
@@ -83,7 +81,7 @@ public class WindowUser extends javax.swing.JPanel {
         txtSearch.setBorderColor(new java.awt.Color(28, 60, 84));
         txtSearch.setColorIcon(new java.awt.Color(28, 60, 84));
         txtSearch.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
-        txtSearch.setPlaceholder("Buscar por nombre de suario");
+        txtSearch.setPlaceholder("Buscar por nombre o numero de documento");
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtSearchKeyTyped(evt);
@@ -145,7 +143,19 @@ public class WindowUser extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(25, 158, 255));
-        jLabel2.setText("Mantenimiento de usuarios");
+        jLabel2.setText("Mantenimiento de clientes");
+
+        btnDelete1.setBackground(new java.awt.Color(253, 194, 15));
+        btnDelete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/check.png"))); // NOI18N
+        btnDelete1.setText("DESACTIVAR EL CLIENTE");
+        btnDelete1.setToolTipText("ELIMINAR USUARIOS");
+        btnDelete1.setColorHover(new java.awt.Color(219, 164, 0));
+        btnDelete1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnDelete1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelete1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -161,6 +171,8 @@ public class WindowUser extends javax.swing.JPanel {
                                 .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -185,10 +197,12 @@ public class WindowUser extends javax.swing.JPanel {
                     .addComponent(idUpdateData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDelete1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1)
                 .addGap(17, 17, 17))
@@ -207,7 +221,7 @@ public class WindowUser extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        RgtUser modal = new RgtUser();
+        RgtCustomer modal = new RgtCustomer();
         modal.setVisible(true);        
         modal.accion = "savedata";
     }//GEN-LAST:event_btnRegisterActionPerformed
@@ -215,21 +229,21 @@ public class WindowUser extends javax.swing.JPanel {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (!idUpdateData.getText().equals("")) {
             int fila = listUser.getSelectedRow();
-            ControllerUser cUser = new ControllerUser();
-            ModelUser mUser = new ModelUser();
-            mUser.setId(Integer.parseInt(idUpdateData.getText()));
-            if(cUser.deleteUser(mUser)) {
-                new rojerusan.RSNotifyAnimated("SUCCESS", "HEMOS ELIMINADO AL USARIO "+listUser.getValueAt(fila, 1).toString(),
+            ControllerCustomer cCustomer = new ControllerCustomer();
+            ModelCustomer mCusomter = new ModelCustomer();
+            mCusomter.setId(Integer.parseInt(idUpdateData.getText()));
+            if(cCustomer.deleteCustomer(mCusomter)) {
+                new rojerusan.RSNotifyAnimated("SUCCESS", "HEMOS ELIMINADO AL CLIENTE "+listUser.getValueAt(fila, 1).toString(),
                     5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                     RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
             } else {
-                new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ELIMINAR AL SUARIO"+listUser.getValueAt(fila, 1).toString(),
+                new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ELIMINAR AL CLIENTE "+listUser.getValueAt(fila, 1).toString(),
                     5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                     RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             }
-            getUser("");
+            getCustomer("");
         } else {
-            new rojerusan.RSNotifyAnimated("ERROR", "SOLICITUD DENEGADA, USTED NO SELECCIONÓ EL USARIO PARA ELIMINAR, SELECCIONA UNO Y VUELVE A INTENTARLO DE NUEVO",
+            new rojerusan.RSNotifyAnimated("ERROR", "SOLICITUD DENEGADA, USTED NO SELECCIONÓ EL CLIENTE PARA ELIMINAR, SELECCIONA UNO Y VUELVE A INTENTARLO DE NUEVO",
                     5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                     RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
         }
@@ -243,15 +257,14 @@ public class WindowUser extends javax.swing.JPanel {
     private void listUserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listUserMousePressed
         if (evt.getClickCount() == 2) {
             int fila = listUser.getSelectedRow();
-            RgtUser modal = new RgtUser();
+            RgtCustomer modal = new RgtCustomer();
             modal.setVisible(true);
             modal.idUpdateData.setText(listUser.getValueAt(fila, 0).toString());
             modal.txtFullName.setText(listUser.getValueAt(fila, 1).toString());
             modal.txtEmail.setText(listUser.getValueAt(fila, 2).toString());
-            modal.txtPassword.setText(listUser.getValueAt(fila, 3).toString());
-            modal.txtUserName.setText(listUser.getValueAt(fila, 4).toString());
+            modal.txtAdress.setText(listUser.getValueAt(fila, 3).toString());
+            modal.cbxTypeDocument.setSelectedItem(listUser.getValueAt(fila, 4).toString());
             modal.txtNumberDocument.setText(listUser.getValueAt(fila, 5).toString());
-            modal.cbxTypeUser.setSelectedItem(listUser.getValueAt(fila, 6).toString());
             
             modal.accion = "updatedata";
             modal.btnRegister.setText("MODIFICAR DATOS");
@@ -269,12 +282,36 @@ public class WindowUser extends javax.swing.JPanel {
     }//GEN-LAST:event_listUserMouseEntered
 
     private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
-        getUser(txtSearch.getText());
+        getCustomer(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyTyped
+
+    private void btnDelete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelete1ActionPerformed
+       if (!idUpdateData.getText().equals("")) {
+            int fila = listUser.getSelectedRow();
+            ControllerCustomer cCustomer = new ControllerCustomer();
+            ModelCustomer mCusomter = new ModelCustomer();
+            mCusomter.setId(Integer.parseInt(idUpdateData.getText()));
+            if(cCustomer.inactiveCustomer(mCusomter)) {
+                new rojerusan.RSNotifyAnimated("SUCCESS", "HEMOS DESACTIVAR AL CLIENTE "+listUser.getValueAt(fila, 1).toString(),
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
+            } else {
+                new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO DESACTIVAR AL CLIENTE "+listUser.getValueAt(fila, 1).toString(),
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            }
+            getCustomer("");
+        } else {
+            new rojerusan.RSNotifyAnimated("ERROR", "SOLICITUD DENEGADA, USTED NO SELECCIONÓ EL CLIENTE PARA DESACTIVARLO, SELECCIONA UNO Y VUELVE A INTENTARLO DE NUEVO",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+        }
+    }//GEN-LAST:event_btnDelete1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSButtonIconI btnDelete;
+    private rojerusan.RSButtonIconI btnDelete1;
     private rojerusan.RSButtonIconI btnRegister;
     public static javax.swing.JLabel idUpdateData;
     private javax.swing.JLabel jLabel1;

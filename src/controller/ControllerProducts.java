@@ -25,7 +25,7 @@ public class ControllerProducts {
             "DESCRIPCIÓN","TIPO",
             "Desc. (%)","Utilidad (%)",
             "Stock","Stock Min.",
-            "P. Compra","p. venta",
+            "Precio de Compra","Precio de venta",
             "¿Con stock?","state"};
         String[] registers = new String[headers.length];
         model = new DefaultTableModel(null, headers);
@@ -33,7 +33,7 @@ public class ControllerProducts {
         query = "SELECT  p.id, p.idtype_product, tp.description AS typeProducts, "
                 + "p.bar_code, p.title, p.description, p.discount, p.utility, "
                 + "p.stock, p.stock_minimun, p.price_shopping, p.price_sale, "
-                + "p.for_stock, IF(p.state = 1, 'ACTIVO','INACTIVO') AS state "
+                + "IF(p.for_stock = 1,'SI','NO') AS ventaconstock, IF(p.state = 1, 'ACTIVO','INACTIVO') AS state "
                 + "FROM products p "
                 + "INNER JOIN type_product tp ON "
                 + "tp.id = p.idtype_product "
@@ -55,7 +55,7 @@ public class ControllerProducts {
                 registers[9] = rs.getString("p.stock_minimun");
                 registers[10] = rs.getString("p.price_shopping");
                 registers[11] = rs.getString("p.price_sale");
-                registers[12] = rs.getString("p.for_stock");
+                registers[12] = rs.getString("ventaconstock");
                 registers[13] = rs.getString("state");
                 model.addRow(registers);
             }
@@ -92,7 +92,7 @@ public class ControllerProducts {
 
     public boolean updateProducts(ModelProducts dts) {
         query = "UPDATE products SET "
-                + "bar_code=?, title=?, description=?, discount=?, utility=?, stock=?, stock_minimun=?, price_shopping=?, price_sale=?, for_stock=? WHERE id=?";
+                + "bar_code=?, title=?, description=?, discount=?, utility=?, stock=?, stock_minimun=?, price_shopping=?, price_sale=?, for_stock=?,state=? WHERE id=?";
         try {
             PreparedStatement pst = cn.prepareStatement(query);
             pst.setString(1, dts.getBarCode());
@@ -105,7 +105,8 @@ public class ControllerProducts {
             pst.setDouble(8, dts.getPriceShopping());
             pst.setDouble(9, dts.getPriceSale());
             pst.setBoolean(10, dts.isForStock());
-            pst.setInt(11, dts.getId());
+            pst.setBoolean(11, dts.isState());
+            pst.setInt(12, dts.getId());
             int n = pst.executeUpdate();
             return n != 0;
         } catch (SQLException e) {
@@ -121,6 +122,23 @@ public class ControllerProducts {
             int n = pst.executeUpdate();
             return n != 0;
         } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    public boolean verifiBarCode(String barCode){
+        boolean exist = false;
+
+        query = "SELECT  * FROM products  WHERE bar_code = '"+barCode+"'";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            
+            if(rs.next()) exist = true;
+            
+            return exist;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
             return false;
         }
     }

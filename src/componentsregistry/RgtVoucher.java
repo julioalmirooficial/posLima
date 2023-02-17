@@ -1,8 +1,7 @@
 package componentsregistry;
 
-import static components.WindowCustomer.listUser;
-import controller.ControllerCustomer;
-import controller.ControllerTypeproduct;
+import static components.WindowVoucher.listVoucher;
+import controller.ControllerVoucher;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -13,12 +12,13 @@ import database.ConnectionDB;
 import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import model.ModelCustomer;
-public class RgtCustomer extends javax.swing.JFrame {
+import model.ModelVoucher;
+
+public class RgtVoucher extends javax.swing.JFrame {
 
     backgorundPanels rgtC = new backgorundPanels();
     public static String accion = "savedata";
-    public RgtCustomer() {
+    public RgtVoucher() {
         this.setContentPane(rgtC);
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -26,17 +26,16 @@ public class RgtCustomer extends javax.swing.JFrame {
         this.setBackground(new Color(0, 0, 0, 50));
     }
 
-    
-    void getCustomer(String search) {
-        ControllerCustomer cCustomer = new ControllerCustomer();
+    void getVoucher() {
+        ControllerVoucher cVoucher = new ControllerVoucher();
         try {
             DefaultTableModel model;
-            model = cCustomer.getCustomer(search);
-            listUser.setModel(model);
-            listUser.getColumnModel().getColumn(0).setMaxWidth(0);
-            listUser.getColumnModel().getColumn(0).setMinWidth(0);
-            listUser.getColumnModel().getColumn(0).setPreferredWidth(0);
-            listUser.setDefaultEditor(Object.class, null);
+            model = cVoucher.getVoucher("");
+            listVoucher.setModel(model);
+            listVoucher.getColumnModel().getColumn(0).setMaxWidth(0);
+            listVoucher.getColumnModel().getColumn(0).setMinWidth(0);
+            listVoucher.getColumnModel().getColumn(0).setPreferredWidth(0);
+            listVoucher.setDefaultEditor(Object.class, null);
             ConnectionDB c = new ConnectionDB();
             c.closeConection();
         } catch (SQLException e) {
@@ -45,11 +44,7 @@ public class RgtCustomer extends javax.swing.JFrame {
     }
 
     void clearImputs() {
-        txtFullName.setText("");
-        txtAdress.setText("");
-        txtEmail.setText("");
-        txtNumberDocument.setText("");
-        cbxTypeDocument.setSelectedItem("TIPOS DE DOCUMENTOS");
+        txtVoucher.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -64,12 +59,12 @@ public class RgtCustomer extends javax.swing.JFrame {
         lblTitleModal = new javax.swing.JLabel();
         idUpdateData = new javax.swing.JLabel();
         btnRegister = new rojerusan.RSButtonHover();
-        txtFullName = new RSMaterialComponent.RSTextFieldMaterial();
+        txtVoucher = new RSMaterialComponent.RSTextFieldMaterial();
         btnClose = new rojerusan.RSButtonHover();
-        txtEmail = new RSMaterialComponent.RSTextFieldMaterial();
-        txtAdress = new RSMaterialComponent.RSTextFieldMaterial();
-        cbxTypeDocument = new RSMaterialComponent.RSComboBoxMaterial();
-        txtNumberDocument = new RSMaterialComponent.RSTextFieldMaterial();
+        txtNumberStart = new RSMaterialComponent.RSTextFieldMaterial();
+        txtNumberCurrent = new RSMaterialComponent.RSTextFieldMaterial();
+        txtSerie = new RSMaterialComponent.RSTextFieldMaterial();
+        txtNumberEnd = new RSMaterialComponent.RSTextFieldMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -97,7 +92,7 @@ public class RgtCustomer extends javax.swing.JFrame {
 
         lblTitleModal.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         lblTitleModal.setForeground(new java.awt.Color(28, 60, 84));
-        lblTitleModal.setText("Registrar clientes");
+        lblTitleModal.setText("Registrar tipos de producto");
 
         idUpdateData.setText("0");
 
@@ -110,7 +105,7 @@ public class RgtCustomer extends javax.swing.JFrame {
                 .addComponent(lblTitleModal, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(idUpdateData, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCloseModal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -134,17 +129,17 @@ public class RgtCustomer extends javax.swing.JFrame {
             }
         });
 
-        txtFullName.setForeground(new java.awt.Color(28, 60, 84));
-        txtFullName.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtFullName.setPhColor(new java.awt.Color(28, 60, 84));
-        txtFullName.setPlaceholder("Nombre y Apellidos");
-        txtFullName.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtFullName.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtVoucher.setForeground(new java.awt.Color(28, 60, 84));
+        txtVoucher.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtVoucher.setPhColor(new java.awt.Color(28, 60, 84));
+        txtVoucher.setPlaceholder("Nombre del comprobante");
+        txtVoucher.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtVoucher.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFullNameKeyReleased(evt);
+                txtVoucherKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFullNameKeyTyped(evt);
+                txtVoucherKeyTyped(evt);
             }
         });
 
@@ -157,49 +152,59 @@ public class RgtCustomer extends javax.swing.JFrame {
             }
         });
 
-        txtEmail.setForeground(new java.awt.Color(28, 60, 84));
-        txtEmail.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtEmail.setPhColor(new java.awt.Color(28, 60, 84));
-        txtEmail.setPlaceholder("Correo electrónico");
-        txtEmail.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNumberStart.setForeground(new java.awt.Color(28, 60, 84));
+        txtNumberStart.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtNumberStart.setPhColor(new java.awt.Color(28, 60, 84));
+        txtNumberStart.setPlaceholder("N° Inicio");
+        txtNumberStart.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtNumberStart.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtEmailKeyReleased(evt);
+                txtNumberStartKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtEmailKeyTyped(evt);
+                txtNumberStartKeyTyped(evt);
             }
         });
 
-        txtAdress.setForeground(new java.awt.Color(28, 60, 84));
-        txtAdress.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtAdress.setPhColor(new java.awt.Color(28, 60, 84));
-        txtAdress.setPlaceholder("Dirección");
-        txtAdress.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtAdress.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNumberCurrent.setForeground(new java.awt.Color(28, 60, 84));
+        txtNumberCurrent.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtNumberCurrent.setPhColor(new java.awt.Color(28, 60, 84));
+        txtNumberCurrent.setPlaceholder("N° Actual");
+        txtNumberCurrent.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtNumberCurrent.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtAdressKeyReleased(evt);
+                txtNumberCurrentKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtAdressKeyTyped(evt);
+                txtNumberCurrentKeyTyped(evt);
             }
         });
 
-        cbxTypeDocument.setForeground(new java.awt.Color(28, 60, 84));
-        cbxTypeDocument.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TIPOS DE DOCUMENTOS", "DNI", "RUC", "PASAPORTE", "LIBRETA M." }));
-        cbxTypeDocument.setColorMaterial(new java.awt.Color(101, 213, 143));
-
-        txtNumberDocument.setForeground(new java.awt.Color(28, 60, 84));
-        txtNumberDocument.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtNumberDocument.setPhColor(new java.awt.Color(28, 60, 84));
-        txtNumberDocument.setPlaceholder("N° Documento");
-        txtNumberDocument.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtNumberDocument.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtSerie.setForeground(new java.awt.Color(28, 60, 84));
+        txtSerie.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtSerie.setPhColor(new java.awt.Color(28, 60, 84));
+        txtSerie.setPlaceholder("Serie");
+        txtSerie.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtSerie.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNumberDocumentKeyReleased(evt);
+                txtSerieKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNumberDocumentKeyTyped(evt);
+                txtSerieKeyTyped(evt);
+            }
+        });
+
+        txtNumberEnd.setForeground(new java.awt.Color(28, 60, 84));
+        txtNumberEnd.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtNumberEnd.setPhColor(new java.awt.Color(28, 60, 84));
+        txtNumberEnd.setPlaceholder("N° Final");
+        txtNumberEnd.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtNumberEnd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNumberEndKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNumberEndKeyTyped(evt);
             }
         });
 
@@ -209,21 +214,21 @@ public class RgtCustomer extends javax.swing.JFrame {
             panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelBackgroundLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtFullName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtVoucher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBackgroundLayout.createSequentialGroup()
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelBackgroundLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelBackgroundLayout.createSequentialGroup()
-                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(104, 104, 104)
-                                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                            .addComponent(txtAdress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelBackgroundLayout.createSequentialGroup()
-                                .addComponent(cbxTypeDocument, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtNumberDocument, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
+                        .addComponent(txtNumberStart, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addComponent(txtNumberCurrent, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBackgroundLayout.createSequentialGroup()
+                        .addComponent(txtNumberEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelBackgroundLayout.setVerticalGroup(
@@ -231,15 +236,15 @@ public class RgtCustomer extends javax.swing.JFrame {
             .addGroup(panelBackgroundLayout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNumberStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumberCurrent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxTypeDocument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNumberDocument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNumberEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,14 +265,14 @@ public class RgtCustomer extends javax.swing.JFrame {
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRound1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 76;
+        gridBagConstraints.ipadx = 29;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         getContentPane().add(panelRound1, gridBagConstraints);
@@ -287,55 +292,71 @@ public class RgtCustomer extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         
-        if(txtFullName.getText().length() <= 2){
+        if(txtVoucher.getText().length() <= 2){
             new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL TIPO DE PRODUCTO",
                         5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                         RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             return;
         }
-        if(cbxTypeDocument.getSelectedIndex() == 0) {
-             new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR SELECCIONA UN TIPO DE DOCUMENTO",
+        if(txtSerie.getText().length() <= 2){
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL SERIE DE COMPROBANTE",
                         5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                         RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             return;
         }
+        if(txtNumberCurrent.getText().length() <= 7){
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL NUMERO ACTUAL DEL COMPROBANTE",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if(txtNumberStart.getText().length() <= 7){
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL NUMERO DE INICIO DEL COMPROBANTE",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if(txtNumberEnd.getText().length() <= 7){
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL NUMERO FINAL DEL COMPROBANTE",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        ControllerVoucher cVoucher = new ControllerVoucher();
+        ModelVoucher mVoucher = new ModelVoucher();
         
-        ControllerCustomer cCustomer = new ControllerCustomer();
-        ModelCustomer mCustomer = new ModelCustomer();
-        mCustomer.setFullName(txtFullName.getText());
-        mCustomer.setEmail(txtEmail.getText().equals("")?"":txtEmail.getText());
-        mCustomer.setAdress(txtAdress.getText().equals("")?"":txtAdress.getText());
-        mCustomer.setNumberDocument(txtNumberDocument.getText().equals("")?"00000000":txtNumberDocument.getText());
-        mCustomer.setTypeDocument(cbxTypeDocument.getSelectedItem().toString());
-        
-        
+        mVoucher.setVoucher(txtVoucher.getText());
+        mVoucher.setNumberStart(txtNumberStart.getText());
+        mVoucher.setNumberCurrent(txtNumberCurrent.getText());
+        mVoucher.setNumberEnd(txtNumberEnd.getText());
+        mVoucher.setSerie(txtSerie.getText());
         
         try {
             if(accion.equals("savedata")) {
-                if (cCustomer.insertCustomer(mCustomer)) {
-                    new rojerusan.RSNotifyAnimated("FELICIDADES", "HAS REGISTRADO UN CLIENTE A TU BASE DE DATOS CON EL NOMBRE DE " + txtFullName.getText(),
+                if (cVoucher.insertVoucher(mVoucher)) {
+                    new rojerusan.RSNotifyAnimated("FELICIDADES", "HAS REGISTRADO UN COMPROBANTE CON LA DESCRIPCIÓN DE " + txtVoucher.getText(),
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
-                    getCustomer("");
+                    getVoucher();
                     ConnectionDB cn = new ConnectionDB();
                     cn.closeConection();
                     clearImputs();
                 } else {
-                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO REGISTRAR EL CLIENTE, POR FAVOR VERIFICA LOS DATOS QUE HAS INGRESADO SON CORRRECTOS",
+                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO REGISTRAR COMPROBANTE, INTENTALO MAS TARDE",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
                 }
             } else if(accion.equals("updatedata")) {
-                mCustomer.setId(Integer.parseInt(idUpdateData.getText()));
-                if (cCustomer.updateCustomer(mCustomer)) {
-                    new rojerusan.RSNotifyAnimated("FELICIDADES", "LOS DATOS DEL CLIENTE " + txtFullName.getText() + "SE HAN ACTUALIZADO CON ÉXITO",
+                mVoucher.setId(Integer.parseInt(idUpdateData.getText()));
+                if (cVoucher.updateVoucher(mVoucher)) {
+                    new rojerusan.RSNotifyAnimated("FELICIDADES", "LOS DATOS DEL COMPROBANTE " + txtVoucher.getText() + "SE HAN ACTUALIZADO CON ÉXITO",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
-                    getCustomer("");
+                    getVoucher();
                     ConnectionDB cn = new ConnectionDB();
                     cn.closeConection();
                 } else {
-                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ACTUALIZAR LOS DATOS DEL CLIENTE, INTENTALO MAS TARDE",
+                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ACTUALIZAR LOS DATOS DEL COMPROBANTE, INTENTALO MAS TARDE",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
                 }
@@ -347,41 +368,49 @@ public class RgtCustomer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegisterActionPerformed
 
-    private void txtFullNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFullNameKeyReleased
+    private void txtVoucherKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVoucherKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFullNameKeyReleased
+    }//GEN-LAST:event_txtVoucherKeyReleased
 
-    private void txtFullNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFullNameKeyTyped
+    private void txtVoucherKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVoucherKeyTyped
 
-    }//GEN-LAST:event_txtFullNameKeyTyped
+    }//GEN-LAST:event_txtVoucherKeyTyped
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
+    private void txtNumberStartKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberStartKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailKeyReleased
+    }//GEN-LAST:event_txtNumberStartKeyReleased
 
-    private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
+    private void txtNumberStartKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberStartKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailKeyTyped
+    }//GEN-LAST:event_txtNumberStartKeyTyped
 
-    private void txtAdressKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAdressKeyReleased
+    private void txtNumberCurrentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberCurrentKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAdressKeyReleased
+    }//GEN-LAST:event_txtNumberCurrentKeyReleased
 
-    private void txtAdressKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAdressKeyTyped
+    private void txtNumberCurrentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberCurrentKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAdressKeyTyped
+    }//GEN-LAST:event_txtNumberCurrentKeyTyped
 
-    private void txtNumberDocumentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberDocumentKeyReleased
+    private void txtSerieKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSerieKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumberDocumentKeyReleased
+    }//GEN-LAST:event_txtSerieKeyReleased
 
-    private void txtNumberDocumentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberDocumentKeyTyped
+    private void txtSerieKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSerieKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumberDocumentKeyTyped
+    }//GEN-LAST:event_txtSerieKeyTyped
+
+    private void txtNumberEndKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberEndKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumberEndKeyReleased
+
+    private void txtNumberEndKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberEndKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumberEndKeyTyped
 
     /**
      * @param args the command line arguments
@@ -400,13 +429,13 @@ public class RgtCustomer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtVoucher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtVoucher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtVoucher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtVoucher.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -16796,7 +16825,7 @@ public class RgtCustomer extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RgtCustomer().setVisible(true);
+                new RgtVoucher().setVisible(true);
             }
         });
     }
@@ -16805,16 +16834,16 @@ public class RgtCustomer extends javax.swing.JFrame {
     public static rojerusan.RSButtonHover btnClose;
     private rojerusan.RSButtonCircle btnCloseModal;
     public static rojerusan.RSButtonHover btnRegister;
-    public static RSMaterialComponent.RSComboBoxMaterial cbxTypeDocument;
     public static javax.swing.JLabel idUpdateData;
     private javax.swing.JPanel jPanel2;
     public static javax.swing.JLabel lblTitleModal;
     private javax.swing.JPanel panelBackground;
     private main.PanelRound panelRound1;
-    public static RSMaterialComponent.RSTextFieldMaterial txtAdress;
-    public static RSMaterialComponent.RSTextFieldMaterial txtEmail;
-    public static RSMaterialComponent.RSTextFieldMaterial txtFullName;
-    public static RSMaterialComponent.RSTextFieldMaterial txtNumberDocument;
+    public static RSMaterialComponent.RSTextFieldMaterial txtNumberCurrent;
+    public static RSMaterialComponent.RSTextFieldMaterial txtNumberEnd;
+    public static RSMaterialComponent.RSTextFieldMaterial txtNumberStart;
+    public static RSMaterialComponent.RSTextFieldMaterial txtSerie;
+    public static RSMaterialComponent.RSTextFieldMaterial txtVoucher;
     // End of variables declaration//GEN-END:variables
 
     class backgorundPanels extends JPanel {

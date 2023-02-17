@@ -63,10 +63,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="subMenuUsuarios" min="-2" pref="106" max="-2" attributes="0"/>
+                      <Component id="subMenuShopping" min="-2" pref="106" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="subMenuPagosAlPersonal" min="-2" pref="96" max="-2" attributes="0"/>
-                      <EmptySpace pref="1016" max="32767" attributes="0"/>
+                      <Component id="subMenuSupplier" min="-2" pref="136" max="-2" attributes="0"/>
+                      <EmptySpace pref="976" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -75,8 +75,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="subMenuUsuarios" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="subMenuPagosAlPersonal" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuShopping" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="21" max="32767" attributes="0"/>
                   </Group>
@@ -84,15 +84,15 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="rojerusan.RSButtonIconI" name="subMenuUsuarios">
+            <Component class="rojerusan.RSButtonIconI" name="subMenuShopping">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f9" green="f6" red="f1" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/icons/users-registry.png"/>
+                  <Image iconType="3" name="/icons/shopping-product.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Usuarios"/>
+                <Property name="text" type="java.lang.String" value="Compras"/>
                 <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f2" green="ec" red="e2" type="rgb"/>
                 </Property>
@@ -107,13 +107,13 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subMenuUsuariosActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subMenuShoppingActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
               </AuxValues>
             </Component>
-            <Component class="rojerusan.RSButtonIconI" name="subMenuPagosAlPersonal">
+            <Component class="rojerusan.RSButtonIconI" name="subMenuSupplier">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f9" green="f6" red="f1" type="rgb"/>
@@ -122,9 +122,9 @@
                   <Color blue="54" green="3c" red="1c" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/icons/check.png"/>
+                  <Image iconType="3" name="/icons/proveedor.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Pagos"/>
+                <Property name="text" type="java.lang.String" value="Proveedores"/>
                 <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f2" green="ec" red="e2" type="rgb"/>
                 </Property>
@@ -139,8 +139,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="subMenuPagosAlPersonalMouseClicked"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subMenuPagosAlPersonalActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="subMenuSupplierMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subMenuSupplierActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>

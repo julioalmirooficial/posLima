@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import rojerusan.RSNotifyAnimated;
 import database.ConnectionDB;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import model.ModelProducts;
@@ -20,6 +21,7 @@ public class RgtProducts extends javax.swing.JFrame {
 
     backgorundPanels rgtC = new backgorundPanels();
     public static String accion = "savedata";
+
     public RgtProducts() {
         this.setContentPane(rgtC);
         initComponents();
@@ -29,10 +31,11 @@ public class RgtProducts extends javax.swing.JFrame {
         cbxTypeProduct.setUI(UIComboBox.createUI(rootPane));
         cbxTypeProducts cbxType = new cbxTypeProducts();
         cbxType.viewTypeProduct(cbxTypeProduct);
+        idTypeProducto.setVisible(false);
     }
 
     void getProducts() {
-          ControllerProducts cProducts = new ControllerProducts();
+        ControllerProducts cProducts = new ControllerProducts();
         try {
             DefaultTableModel model;
             model = cProducts.getProducts("");
@@ -58,7 +61,34 @@ public class RgtProducts extends javax.swing.JFrame {
     }
 
     void clearImputs() {
+        txtBarCode.setText("");
+        txtDescription.setText("---");
+        txtDiscount.setText("0");
+        txtPriceSales.setText("0.00");
+        txtPriceShopping.setText("0.00");
+        txtStock.setText("0");
+        txtStockMinimun.setText("10");
         txtTitle.setText("");
+        txtUtility.setText("0");
+    }
+
+    void generateNewPriceSale() {
+        if (txtPriceShopping.getText().length() <= 0) {
+            new rojerusan.RSNotifyAnimated("ERROR", "EL PRECIO DE COMPRA NO DEBE DE IR CON EL VALOR DE VACIO, INGRESA Y UTLIDAD Y EL PRECIO DE COMPRA",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if (Double.parseDouble(txtPriceShopping.getText()) <= 0) {
+            new rojerusan.RSNotifyAnimated("ERROR", "EL PRECIO DE COMPRA NO DEBE DE IR CON EL VALOR DE 0, INGRESA Y UTLIDAD Y EL PRECIO DE COMPRA",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        double generatePercentage = Double.parseDouble(txtUtility.getText()) / 100;
+        double generateUtility = Double.parseDouble(txtPriceShopping.getText()) * generatePercentage;
+        double generateNewPrice = Double.parseDouble(txtPriceShopping.getText()) + generateUtility;
+        txtPriceSales.setText(String.valueOf(Math.round(generateNewPrice * 100) / 100d));
     }
 
     @SuppressWarnings("unchecked")
@@ -179,6 +209,12 @@ public class RgtProducts extends javax.swing.JFrame {
             }
         });
 
+        cbxTypeProduct.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxTypeProductItemStateChanged(evt);
+            }
+        });
+
         txtBarCode.setForeground(new java.awt.Color(28, 60, 84));
         txtBarCode.setColorMaterial(new java.awt.Color(101, 213, 143));
         txtBarCode.setPhColor(new java.awt.Color(28, 60, 84));
@@ -209,10 +245,10 @@ public class RgtProducts extends javax.swing.JFrame {
         });
 
         txtDiscount.setForeground(new java.awt.Color(28, 60, 84));
-        txtDiscount.setText("0.00");
+        txtDiscount.setText("0");
         txtDiscount.setColorMaterial(new java.awt.Color(101, 213, 143));
         txtDiscount.setPhColor(new java.awt.Color(28, 60, 84));
-        txtDiscount.setPlaceholder("Descuento");
+        txtDiscount.setPlaceholder("Descuento (%)");
         txtDiscount.setSelectionColor(new java.awt.Color(117, 95, 238));
         txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -224,11 +260,15 @@ public class RgtProducts extends javax.swing.JFrame {
         });
 
         txtUtility.setForeground(new java.awt.Color(28, 60, 84));
+        txtUtility.setText("0");
         txtUtility.setColorMaterial(new java.awt.Color(101, 213, 143));
         txtUtility.setPhColor(new java.awt.Color(28, 60, 84));
         txtUtility.setPlaceholder("Utilidad en (%)");
         txtUtility.setSelectionColor(new java.awt.Color(117, 95, 238));
         txtUtility.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUtilityKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtUtilityKeyReleased(evt);
             }
@@ -238,7 +278,7 @@ public class RgtProducts extends javax.swing.JFrame {
         });
 
         txtStock.setForeground(new java.awt.Color(28, 60, 84));
-        txtStock.setText("0.00");
+        txtStock.setText("0");
         txtStock.setColorMaterial(new java.awt.Color(101, 213, 143));
         txtStock.setPhColor(new java.awt.Color(28, 60, 84));
         txtStock.setPlaceholder("Stock actual");
@@ -268,11 +308,15 @@ public class RgtProducts extends javax.swing.JFrame {
         });
 
         txtPriceShopping.setForeground(new java.awt.Color(28, 60, 84));
+        txtPriceShopping.setText("0.00");
         txtPriceShopping.setColorMaterial(new java.awt.Color(101, 213, 143));
         txtPriceShopping.setPhColor(new java.awt.Color(28, 60, 84));
         txtPriceShopping.setPlaceholder("Precio de compra");
         txtPriceShopping.setSelectionColor(new java.awt.Color(117, 95, 238));
         txtPriceShopping.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPriceShoppingKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtPriceShoppingKeyReleased(evt);
             }
@@ -428,18 +472,44 @@ public class RgtProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseModalActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        
-        if(txtTitle.getText().length() <= 2){
-            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL TIPO DE PRODUCTO",
-                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+
+        if (txtTitle.getText().length() <= 2) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL NOMBRE DEL PRODUCTO",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             return;
         }
+
+        if (txtBarCode.getText().length() <= 2) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL CODIGO DE BARRA DEL PRODUCTO",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if (Double.parseDouble(txtUtility.getText()) <= 0) {
+            new rojerusan.RSNotifyAnimated("ERROR", "LA UTLIDAD DE PRODUCTO NO DEBE DE IR CON EL VALOR DE CERO INGRES UNA UTILIDAD PARA CALCULAR SU PRECIO DE VENTA",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+
+        if (Double.parseDouble(txtPriceSales.getText()) <= 0) {
+            new rojerusan.RSNotifyAnimated("ERROR", "EL PRECIO DE VENTA NO DEBE DE IR CON EL VALOR DE 0, INGRESA Y UTLIDAD Y EL PRECIO DE COMPRA Y PRECIONA ENTER PARA CALCULAR LA UTILIDAD",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if (Double.parseDouble(txtPriceShopping.getText()) <= 0) {
+            new rojerusan.RSNotifyAnimated("ERROR", "EL PRECIO DE COMPRA NO DEBE DE IR CON EL VALOR DE 0, INGRESA Y UTLIDAD Y EL PRECIO DE COMPRA",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+
         ControllerProducts cProducts = new ControllerProducts();
         ModelProducts mProducts = new ModelProducts();
-        
-        mProducts.setIdTypeProduct(3);
-//        mProducts.setIdTypeProduct(Integer.parseInt(idTypeProducto.getText()));
+
+        mProducts.setIdTypeProduct(Integer.parseInt(idTypeProducto.getText()));
         mProducts.setBarCode(txtBarCode.getText());
         mProducts.setTitle(txtTitle.getText());
         mProducts.setDescription(txtDescription.getText());
@@ -449,15 +519,27 @@ public class RgtProducts extends javax.swing.JFrame {
         mProducts.setStockMinimun(Integer.parseInt(txtStockMinimun.getText()));
         mProducts.setPriceShopping(Double.parseDouble(txtPriceShopping.getText()));
         mProducts.setPriceSale(Double.parseDouble(txtPriceSales.getText()));
-        
-        if(checkForStock.isSelected()) {
+
+        if (checkForStock.isSelected()) {
+            mProducts.setForStock(true);
+        } else {
+            mProducts.setForStock(false);
+        }
+
+        if (checkState.isSelected()) {
             mProducts.setState(true);
         } else {
             mProducts.setState(false);
         }
-        
+
         try {
-            if(accion.equals("savedata")) {
+            if (accion.equals("savedata")) {
+                if (cProducts.verifiBarCode(txtBarCode.getText())) {
+                    new rojerusan.RSNotifyAnimated("ERROR", "EL CODIGO DE BARRA YA HA SIDO REGISTRADO Y LO ESTA USANDO OTRO PRODUCTO",
+                            5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                            RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                    return;
+                }
                 if (cProducts.insertProducts(mProducts)) {
                     new rojerusan.RSNotifyAnimated("FELICIDADES", "HAS REGISTRADO UN PRODUCTO CON EL NOMBRE DE " + txtTitle.getText(),
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
@@ -471,7 +553,7 @@ public class RgtProducts extends javax.swing.JFrame {
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
                 }
-            } else if(accion.equals("updatedata")) {
+            } else if (accion.equals("updatedata")) {
                 mProducts.setId(Integer.parseInt(idUpdateData.getText()));
                 if (cProducts.updateProducts(mProducts)) {
                     new rojerusan.RSNotifyAnimated("FELICIDADES", "LOS DATOS DEL PRODUCTO" + txtTitle.getText() + "SE HAN ACTUALIZADO CON ÉXITO",
@@ -570,20 +652,36 @@ public class RgtProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPriceSalesKeyTyped
 
     private void checkForStockItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkForStockItemStateChanged
-        if(checkForStock.isSelected()) {
+        if (checkForStock.isSelected()) {
             checkForStock.setText("Venta con stock (si)");
         } else {
-            checkForStock.setText("Venta con stock (no)");            
+            checkForStock.setText("Venta con stock (no)");
         }
     }//GEN-LAST:event_checkForStockItemStateChanged
 
     private void checkStateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkStateItemStateChanged
-        if(checkState.isSelected()) {
+        if (checkState.isSelected()) {
             checkState.setText("Estado del producto activo");
         } else {
             checkState.setText("Estado del producto inactivo");
         }
     }//GEN-LAST:event_checkStateItemStateChanged
+
+    private void cbxTypeProductItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxTypeProductItemStateChanged
+        idTypeProducto.setText(String.valueOf(cbxTypeProduct.getItemAt(cbxTypeProduct.getSelectedIndex()).getId()));
+    }//GEN-LAST:event_cbxTypeProductItemStateChanged
+
+    private void txtUtilityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUtilityKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            generateNewPriceSale();
+        }
+    }//GEN-LAST:event_txtUtilityKeyPressed
+
+    private void txtPriceShoppingKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceShoppingKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            generateNewPriceSale();
+        }
+    }//GEN-LAST:event_txtPriceShoppingKeyPressed
 
     /**
      * @param args the command line arguments
