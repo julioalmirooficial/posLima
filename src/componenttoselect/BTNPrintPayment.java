@@ -1,4 +1,4 @@
-package componentslisttoselect;
+package componenttoselect;
 
 import main.Home;
 

@@ -1,16 +1,13 @@
 package components;
 
 import componentsregistry.RgtTypeProduct;
-import componentsregistry.RgtUser;
 import controller.ControllerTypeproduct;
-import controller.ControllerUser;
 import database.ConnectionDB;
 import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.ModelTypeProduct;
-import model.ModelUser;
 import rojerusan.RSNotifyAnimated;
 
 public class WindowTypeProduct extends javax.swing.JPanel {

@@ -101,4 +101,31 @@ public class ControllerSupplier {
             return false;
         }
     }
+    
+    //LISTA DE PROVEEDOR PARA EL MODAL
+    public DefaultTableModel getSupplierModal(String search) {
+
+        DefaultTableModel model;
+        String[] headers = {"ID", "Razón social","RUC"};
+        String[] registers = new String[headers.length];
+        model = new DefaultTableModel(null, headers);
+
+        query = "SELECT * FROM supplier "
+                + "WHERE CONCAT(full_name,' ',ruc)like '%" + search + "%' AND state = 1 ORDER BY id DESC LIMIT 30";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                registers[0] = rs.getString("id");
+                registers[1] = rs.getString("full_name");
+                registers[2] = rs.getString("ruc");
+                model.addRow(registers);
+            }
+            return model;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+            return null;
+        }
+    }
 }

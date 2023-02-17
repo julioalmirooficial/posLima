@@ -1,7 +1,7 @@
 package maincomponents;
 
+import components.WindowShopping;
 import components.WindowSupplier;
-import components.WindowUser;
 import controllerpublic.ChangePanel;
 import java.awt.Color;
 
@@ -112,7 +112,7 @@ public class Shopping extends javax.swing.JPanel {
     private void subMenuShoppingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuShoppingActionPerformed
         subMenuShopping.setBackground(new Color(226, 236, 242));
         subMenuSupplier.setBackground(new Color(241, 246, 249));
-        new ChangePanel(mainDesktop, new WindowUser());
+        new ChangePanel(mainDesktop, new WindowShopping());
     }//GEN-LAST:event_subMenuShoppingActionPerformed
 
     private void subMenuSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subMenuSupplierMouseClicked
@@ -129,7 +129,7 @@ public class Shopping extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel mainDesktop;
+    public static javax.swing.JPanel mainDesktop;
     public static rojerusan.RSButtonIconI subMenuShopping;
     public static rojerusan.RSButtonIconI subMenuSupplier;
     // End of variables declaration//GEN-END:variables

@@ -142,4 +142,39 @@ public class ControllerProducts {
             return false;
         }
     }
+    
+    // METODOS PARA EL MODAL
+    public DefaultTableModel getProductsModalShopping(String search) {
+
+        DefaultTableModel model;
+        String[] headers = {
+            "ID", "COD. BARRA","PRODUCTO", "Stock", "Precio de Compra","Precio de venta","utilidad"};
+        String[] registers = new String[headers.length];
+        model = new DefaultTableModel(null, headers);
+
+        query = "SELECT  p.id, p.bar_code, p.title, p.stock, p.price_shopping, p.price_sale,p.utility "
+                + "FROM products p "
+                + "INNER JOIN type_product tp ON "
+                + "tp.id = p.idtype_product "
+                + "WHERE CONCAT(p.title, ' ',p.bar_code)like '%" + search + "%' ORDER BY p.id DESC LIMIT 30";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                registers[0] = rs.getString("p.id");
+                registers[1] = rs.getString("p.bar_code");
+                registers[2] = rs.getString("p.title");
+                registers[3] = rs.getString("p.stock");
+                registers[4] = rs.getString("p.price_shopping");
+                registers[5] = rs.getString("p.price_sale");
+                registers[6] = rs.getString("p.utility");
+                model.addRow(registers);
+            }
+            return model;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+            return null;
+        }
+    }
 }
