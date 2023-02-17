@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import maincomponents.Company;
 import maincomponents.Customer;
+import maincomponents.Sales;
 import maincomponents.Setting;
 import maincomponents.Shopping;
 import maincomponents.Store;
@@ -766,7 +767,7 @@ public class Home extends javax.swing.JFrame {
         mnuCustomer.setBackground(new Color(238,240,241));
         mnuSetting.setColorText(new Color(76,76,76));
         mnuSetting.setBackground(new Color(238,240,241));
-//        new ChangePanel(PrincipalHomes, new Sales());
+        new ChangePanel(PrincipalHomes, new Sales());
 //        cLogin.loginAccessSales(idUserLogin.getText());
         lblTitleHome.setText("Ventas");
     }//GEN-LAST:event_mnuSalesActionPerformed

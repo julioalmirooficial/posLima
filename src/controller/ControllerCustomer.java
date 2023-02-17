@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.ModelCustomer;
@@ -103,6 +104,29 @@ public class ControllerCustomer {
             return n != 0;
         } catch (SQLException e) {
             return false;
+        }
+    }
+    
+    public ArrayList searchCustomerSale(String rumberDocument) {
+
+      ArrayList data = new ArrayList();
+
+        query = "SELECT * FROM customer "
+                + "WHERE number_document = '"+rumberDocument + "' AND state = 1";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                data.add(rs.getString("id"));
+                data.add(rs.getString("full_name"));
+                data.add(rs.getString("adress"));
+                data.add(rs.getString("number_document"));
+            }
+            return data;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+            return null;
         }
     }
 }

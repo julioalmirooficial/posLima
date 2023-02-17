@@ -1,6 +1,6 @@
 package components;
 
-import componenttoselect.ModalProducts;
+import componenttoselect.ModalProductsShopping;
 import componenttoselect.ModalSupplier;
 import controller.ControllerGetNumberVoucher;
 import controller.ControllerShopping;
@@ -308,7 +308,7 @@ public class WindowShopping extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductsActionPerformed
-        ModalProducts modal = new ModalProducts();
+        ModalProductsShopping modal = new ModalProductsShopping();
         modal.setVisible(true);
     }//GEN-LAST:event_btnSearchProductsActionPerformed
 

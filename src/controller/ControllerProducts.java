@@ -177,4 +177,36 @@ public class ControllerProducts {
             return null;
         }
     }
+    
+    public DefaultTableModel getProductsModalSales(String search) {
+
+        DefaultTableModel model;
+        String[] headers = {
+            "ID", "COD. BARRA","PRODUCTO", "Stock", "Precio","Descuento","con stock"};
+        String[] registers = new String[headers.length];
+        model = new DefaultTableModel(null, headers);
+
+        query = "SELECT  p.id, p.bar_code, p.title, p.stock, p.price_sale,p.for_stock,p.discount "
+                + "FROM products p "
+                + "WHERE CONCAT(p.title, ' ',p.bar_code)like '%" + search + "%' AND state = 1 ORDER BY p.id DESC LIMIT 30";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                registers[0] = rs.getString("p.id");
+                registers[1] = rs.getString("p.bar_code");
+                registers[2] = rs.getString("p.title");
+                registers[3] = rs.getString("p.stock");
+                registers[4] = rs.getString("p.price_sale");
+                registers[5] = rs.getString("p.discount");
+                registers[6] = rs.getString("p.for_stock");
+                model.addRow(registers);
+            }
+            return model;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+            return null;
+        }
+    }
 }

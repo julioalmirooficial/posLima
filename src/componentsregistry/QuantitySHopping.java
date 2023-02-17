@@ -1,6 +1,6 @@
 package componentsregistry;
 
-import componenttoselect.ModalProducts;
+import componenttoselect.ModalProductsShopping;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -78,10 +78,10 @@ void insert() {
              return;
         }
         
-        ModalProducts.pQuantity = txtQuantityShopping.getText();
-        ModalProducts.pSales = txtPriceSale.getText();
-        ModalProducts.pShopping = txtPriceShopping.getText();
-        ModalProducts.utility = txtUtility.getText();
+        ModalProductsShopping.pQuantity = txtQuantityShopping.getText();
+        ModalProductsShopping.pSales = txtPriceSale.getText();
+        ModalProductsShopping.pShopping = txtPriceShopping.getText();
+        ModalProductsShopping.utility = txtUtility.getText();
 }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
