@@ -3,7 +3,9 @@ package controller;
 import database.ConnectionDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import model.ModelDetailSales;
 import model.ModelSales;
 
@@ -68,6 +70,22 @@ public class ControllerSales {
             pst.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
+        }
+    }
+
+    public String  lastIDSales() {
+        query = "SELECT MAX(id) AS id FROM sales ";
+        String id = null;
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {                
+                id = rs.getString("id");
+            }
+            return id;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return "0";
         }
     }
 }

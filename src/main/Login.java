@@ -1,5 +1,6 @@
 package main;
 
+import controller.ControllerAccessUser;
 import controller.ControllerLogin;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -27,7 +28,6 @@ public class Login extends javax.swing.JFrame {
         }
         setIconImage(image);
         lblLogoLogin.setIcon(new ImageIcon("D:\\sistemapos/logo/logo-login.png"));
-//        cbxTurno.setUI(UIComboBoxLogin.createUI(rootPane));
         txtUserName.requestFocus();
     }
     
@@ -63,6 +63,16 @@ public class Login extends javax.swing.JFrame {
         home.idUserLogin.setText(String.valueOf(data.get(0)));
         home.userName.setText(String.valueOf(data.get(1)));
         home.userLevel.setText(String.valueOf(data.get(2)));
+        
+        ControllerAccessUser access = new ControllerAccessUser();
+        access.company(String.valueOf(data.get(2)));
+        access.customer(String.valueOf(data.get(2)));
+        access.setting(String.valueOf(data.get(2)));
+        access.reports(String.valueOf(data.get(2)));
+        access.shopping(String.valueOf(data.get(2)));
+        access.store(String.valueOf(data.get(2)));
+        access.user(String.valueOf(data.get(2)));
+        access.ventas(String.valueOf(data.get(2)));
         home.setVisible(true);
         this.dispose();
         

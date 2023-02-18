@@ -1,41 +1,91 @@
 package componentsregistry;
 
-import static components.WindowCustomer.listUser;
-import controller.ControllerCustomer;
+import controller.ControllerBox;
+import controller.ControllerGetBox;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.table.DefaultTableModel;
 import rojerusan.RSNotifyAnimated;
 import database.ConnectionDB;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import model.ModelCustomer;
-public class RgtCustomer extends javax.swing.JFrame {
+import main.Home;
+import model.ModelBox;
+
+public class RgtOpenBox extends javax.swing.JFrame {
 
     backgorundPanels rgtC = new backgorundPanels();
     public static String accion = "savedata";
-    public RgtCustomer() {
+
+    public RgtOpenBox() {
         this.setContentPane(rgtC);
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
-        idUpdateData.setVisible(false);
         this.setBackground(new Color(0, 0, 0, 50));
+        validateBox();
+        idUpdateData.setVisible(false);
     }
 
-    
-    void getCustomer(String search) {
-        ControllerCustomer cCustomer = new ControllerCustomer();
+    void loadAmount() {
+        ControllerGetBox amount = new ControllerGetBox();
+        txtAmountCash.setText(String.valueOf(Double.parseDouble(amount.getCash(Home.idUserLogin.getText())) + Double.parseDouble(txtAmountOpening.getText())));
+        txtAmountCheque.setText(amount.getCheque(Home.idUserLogin.getText()));
+        txtAmountTransfer.setText(amount.getTransfer(Home.idUserLogin.getText()));
+        txtAmountVisa.setText(amount.getVisa(Home.idUserLogin.getText()));
+        double amountClose = Double.parseDouble(amount.getCash(Home.idUserLogin.getText()))
+                + Double.parseDouble(amount.getCheque(Home.idUserLogin.getText()))
+                + Double.parseDouble(amount.getTransfer(Home.idUserLogin.getText()))
+                + Double.parseDouble(amount.getVisa(Home.idUserLogin.getText()))
+                +Double.parseDouble(txtAmountOpening.getText());
+        txtAmountClosing.setText(String.valueOf(amountClose));
+    }
+
+    void validateBox() {
+
         try {
-            DefaultTableModel model;
-            model = cCustomer.getCustomer(search);
-            listUser.setModel(model);
-            listUser.getColumnModel().getColumn(0).setMaxWidth(0);
-            listUser.getColumnModel().getColumn(0).setMinWidth(0);
-            listUser.getColumnModel().getColumn(0).setPreferredWidth(0);
-            listUser.setDefaultEditor(Object.class, null);
+            ControllerBox validate = new ControllerBox();
+            if (validate.validateBoxOpening(Home.idUserLogin.getText())) {
+                ArrayList data = validate.getOpeningDate(Home.idUserLogin.getText());
+                idUpdateData.setText(String.valueOf(data.get(0)));
+                txtAmountOpening.setText(String.valueOf(data.get(2)));
+                lblTitleModal.setText("Caja aperturada el : " + data.get(1));
+                accion = "updatedata";
+                txtAmountOpening.setEnabled(false);
+                btnRegister.setText("Cerrar caja");
+                txtAmountCash.setEnabled(false);
+                txtAmountCheque.setEnabled(false);
+                txtAmountClosing.setEnabled(false);
+                txtAmountTransfer.setEnabled(false);
+                txtAmountVisa.setEnabled(false);
+                txtAmountOpening.setEnabled(false);
+                loadAmount();
+            } else {
+                if (validate.getClosedDate(Home.idUserLogin.getText())) {
+                    ArrayList data = validate.getOpeningDateClosed(Home.idUserLogin.getText());
+                    txtAmountOpening.setText(String.valueOf(data.get(0)));
+                    lblTitleModal.setText("Caja cerrada");
+                    txtAmountCash.setEnabled(false);
+                    txtAmountCheque.setEnabled(false);
+                    txtAmountClosing.setEnabled(false);
+                    txtAmountTransfer.setEnabled(false);
+                    txtAmountVisa.setEnabled(false);
+                    txtAmountOpening.setEnabled(false);
+                    btnRegister.setEnabled(false);
+                    loadAmount();
+                } else {
+                    accion = "savedata";
+                    txtAmountCash.setEnabled(false);
+                    txtAmountCheque.setEnabled(false);
+                    txtAmountClosing.setEnabled(false);
+                    txtAmountTransfer.setEnabled(false);
+                    txtAmountVisa.setEnabled(false);
+                }
+            }
             ConnectionDB c = new ConnectionDB();
             c.closeConection();
         } catch (SQLException e) {
@@ -44,11 +94,7 @@ public class RgtCustomer extends javax.swing.JFrame {
     }
 
     void clearImputs() {
-        txtFullName.setText("");
-        txtAdress.setText("");
-        txtEmail.setText("");
-        txtNumberDocument.setText("");
-        cbxTypeDocument.setSelectedItem("TIPOS DE DOCUMENTOS");
+        txtAmountOpening.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -63,12 +109,13 @@ public class RgtCustomer extends javax.swing.JFrame {
         lblTitleModal = new javax.swing.JLabel();
         idUpdateData = new javax.swing.JLabel();
         btnRegister = new rojerusan.RSButtonHover();
-        txtFullName = new RSMaterialComponent.RSTextFieldMaterial();
+        txtAmountOpening = new RSMaterialComponent.RSTextFieldMaterial();
         btnClose = new rojerusan.RSButtonHover();
-        txtEmail = new RSMaterialComponent.RSTextFieldMaterial();
-        txtAdress = new RSMaterialComponent.RSTextFieldMaterial();
-        cbxTypeDocument = new RSMaterialComponent.RSComboBoxMaterial();
-        txtNumberDocument = new RSMaterialComponent.RSTextFieldMaterial();
+        txtAmountClosing = new RSMaterialComponent.RSTextFieldMaterial();
+        txtAmountCheque = new RSMaterialComponent.RSTextFieldMaterial();
+        txtAmountTransfer = new RSMaterialComponent.RSTextFieldMaterial();
+        txtAmountVisa = new RSMaterialComponent.RSTextFieldMaterial();
+        txtAmountCash = new RSMaterialComponent.RSTextFieldMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -96,7 +143,7 @@ public class RgtCustomer extends javax.swing.JFrame {
 
         lblTitleModal.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         lblTitleModal.setForeground(new java.awt.Color(28, 60, 84));
-        lblTitleModal.setText("Registrar clientes");
+        lblTitleModal.setText("Caja por aperturar");
 
         idUpdateData.setText("0");
 
@@ -106,10 +153,10 @@ public class RgtCustomer extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblTitleModal, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblTitleModal, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(idUpdateData, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addGap(86, 86, 86)
                 .addComponent(btnCloseModal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -133,17 +180,18 @@ public class RgtCustomer extends javax.swing.JFrame {
             }
         });
 
-        txtFullName.setForeground(new java.awt.Color(28, 60, 84));
-        txtFullName.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtFullName.setPhColor(new java.awt.Color(28, 60, 84));
-        txtFullName.setPlaceholder("Nombre y Apellidos");
-        txtFullName.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtFullName.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtAmountOpening.setForeground(new java.awt.Color(28, 60, 84));
+        txtAmountOpening.setText("0.00");
+        txtAmountOpening.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtAmountOpening.setPhColor(new java.awt.Color(28, 60, 84));
+        txtAmountOpening.setPlaceholder("Monto de apertura");
+        txtAmountOpening.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtAmountOpening.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFullNameKeyReleased(evt);
+                txtAmountOpeningKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFullNameKeyTyped(evt);
+                txtAmountOpeningKeyTyped(evt);
             }
         });
 
@@ -156,49 +204,78 @@ public class RgtCustomer extends javax.swing.JFrame {
             }
         });
 
-        txtEmail.setForeground(new java.awt.Color(28, 60, 84));
-        txtEmail.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtEmail.setPhColor(new java.awt.Color(28, 60, 84));
-        txtEmail.setPlaceholder("Correo electrónico");
-        txtEmail.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtAmountClosing.setForeground(new java.awt.Color(28, 60, 84));
+        txtAmountClosing.setText("0.00");
+        txtAmountClosing.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtAmountClosing.setPhColor(new java.awt.Color(28, 60, 84));
+        txtAmountClosing.setPlaceholder("Monto de cierre");
+        txtAmountClosing.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtAmountClosing.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtEmailKeyReleased(evt);
+                txtAmountClosingKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtEmailKeyTyped(evt);
+                txtAmountClosingKeyTyped(evt);
             }
         });
 
-        txtAdress.setForeground(new java.awt.Color(28, 60, 84));
-        txtAdress.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtAdress.setPhColor(new java.awt.Color(28, 60, 84));
-        txtAdress.setPlaceholder("Dirección");
-        txtAdress.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtAdress.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtAmountCheque.setForeground(new java.awt.Color(28, 60, 84));
+        txtAmountCheque.setText("0.00");
+        txtAmountCheque.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtAmountCheque.setPhColor(new java.awt.Color(28, 60, 84));
+        txtAmountCheque.setPlaceholder("Monto en Cheque");
+        txtAmountCheque.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtAmountCheque.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtAdressKeyReleased(evt);
+                txtAmountChequeKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtAdressKeyTyped(evt);
+                txtAmountChequeKeyTyped(evt);
             }
         });
 
-        cbxTypeDocument.setForeground(new java.awt.Color(28, 60, 84));
-        cbxTypeDocument.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TIPOS DE DOCUMENTOS", "DNI", "RUC", "PASAPORTE", "LIBRETA M." }));
-        cbxTypeDocument.setColorMaterial(new java.awt.Color(101, 213, 143));
-
-        txtNumberDocument.setForeground(new java.awt.Color(28, 60, 84));
-        txtNumberDocument.setColorMaterial(new java.awt.Color(101, 213, 143));
-        txtNumberDocument.setPhColor(new java.awt.Color(28, 60, 84));
-        txtNumberDocument.setPlaceholder("N° Documento");
-        txtNumberDocument.setSelectionColor(new java.awt.Color(117, 95, 238));
-        txtNumberDocument.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtAmountTransfer.setForeground(new java.awt.Color(28, 60, 84));
+        txtAmountTransfer.setText("0.00");
+        txtAmountTransfer.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtAmountTransfer.setPhColor(new java.awt.Color(28, 60, 84));
+        txtAmountTransfer.setPlaceholder("Monto en transferencia");
+        txtAmountTransfer.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtAmountTransfer.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNumberDocumentKeyReleased(evt);
+                txtAmountTransferKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNumberDocumentKeyTyped(evt);
+                txtAmountTransferKeyTyped(evt);
+            }
+        });
+
+        txtAmountVisa.setForeground(new java.awt.Color(28, 60, 84));
+        txtAmountVisa.setText("0.00");
+        txtAmountVisa.setColorMaterial(new java.awt.Color(101, 213, 143));
+        txtAmountVisa.setPhColor(new java.awt.Color(28, 60, 84));
+        txtAmountVisa.setPlaceholder("Monto en tarjeta Visa");
+        txtAmountVisa.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtAmountVisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAmountVisaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAmountVisaKeyTyped(evt);
+            }
+        });
+
+        txtAmountCash.setForeground(new java.awt.Color(28, 60, 84));
+        txtAmountCash.setText("0.00");
+        txtAmountCash.setColorMaterial(new java.awt.Color(238, 111, 111));
+        txtAmountCash.setPhColor(new java.awt.Color(28, 60, 84));
+        txtAmountCash.setPlaceholder("Monto en Efectivo en caja");
+        txtAmountCash.setSelectionColor(new java.awt.Color(117, 95, 238));
+        txtAmountCash.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAmountCashKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAmountCashKeyTyped(evt);
             }
         });
 
@@ -208,37 +285,42 @@ public class RgtCustomer extends javax.swing.JFrame {
             panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelBackgroundLayout.createSequentialGroup()
-                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtFullName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelBackgroundLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelBackgroundLayout.createSequentialGroup()
-                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(104, 104, 104)
-                                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                            .addComponent(txtAdress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelBackgroundLayout.createSequentialGroup()
-                                .addComponent(cbxTypeDocument, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtNumberDocument, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
-                .addContainerGap())
+                        .addComponent(txtAmountOpening, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAmountClosing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBackgroundLayout.createSequentialGroup()
+                        .addComponent(txtAmountTransfer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAmountCheque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBackgroundLayout.createSequentialGroup()
+                        .addComponent(txtAmountCash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAmountVisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBackgroundLayout.createSequentialGroup()
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBackgroundLayout.setVerticalGroup(
             panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBackgroundLayout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAmountOpening, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAmountClosing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAmountTransfer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAmountCheque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxTypeDocument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNumberDocument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAmountCash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAmountVisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,14 +341,14 @@ public class RgtCustomer extends javax.swing.JFrame {
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRound1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 76;
+        gridBagConstraints.ipadx = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         getContentPane().add(panelRound1, gridBagConstraints);
@@ -285,102 +367,144 @@ public class RgtCustomer extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseModalActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        
-        if(txtFullName.getText().length() <= 2){
-            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA EL TIPO DE PRODUCTO",
-                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+
+        if (!txtAmountOpening.getText().matches("^\\d+(\\.\\d+)?$")) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA UN NUMERO, ESTE CAMPO NO PERMITE INGRESA CARACTERES",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             return;
         }
-        if(cbxTypeDocument.getSelectedIndex() == 0) {
-             new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR SELECCIONA UN TIPO DE DOCUMENTO",
-                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+
+        if (!txtAmountCash.getText().matches("^\\d+(\\.\\d+)?$")) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA UN NUMERO, ESTE CAMPO NO PERMITE INGRESA CARACTERES",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
             return;
         }
-        
-        ControllerCustomer cCustomer = new ControllerCustomer();
-        ModelCustomer mCustomer = new ModelCustomer();
-        mCustomer.setFullName(txtFullName.getText());
-        mCustomer.setEmail(txtEmail.getText().equals("")?"":txtEmail.getText());
-        mCustomer.setAdress(txtAdress.getText().equals("")?"":txtAdress.getText());
-        mCustomer.setNumberDocument(txtNumberDocument.getText().equals("")?"00000000":txtNumberDocument.getText());
-        mCustomer.setTypeDocument(cbxTypeDocument.getSelectedItem().toString());
-        
-        
-        
+        if (!txtAmountCheque.getText().matches("^\\d+(\\.\\d+)?$")) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA UN NUMERO, ESTE CAMPO NO PERMITE INGRESA CARACTERES",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if (!txtAmountClosing.getText().matches("^\\d+(\\.\\d+)?$")) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA UN NUMERO, ESTE CAMPO NO PERMITE INGRESA CARACTERES",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if (!txtAmountTransfer.getText().matches("^\\d+(\\.\\d+)?$")) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA UN NUMERO, ESTE CAMPO NO PERMITE INGRESA CARACTERES",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if (!txtAmountVisa.getText().matches("^\\d+(\\.\\d+)?$")) {
+            new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA UN NUMERO, ESTE CAMPO NO PERMITE INGRESA CARACTERES",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        ControllerBox cBox = new ControllerBox();
+        ModelBox mBox = new ModelBox();
         try {
-            if(accion.equals("savedata")) {
-                if (cCustomer.insertCustomer(mCustomer)) {
-                    new rojerusan.RSNotifyAnimated("FELICIDADES", "HAS REGISTRADO UN CLIENTE A TU BASE DE DATOS CON EL NOMBRE DE " + txtFullName.getText(),
+            if (accion.equals("savedata")) {
+                mBox.setIdUser(Integer.parseInt(Home.idUserLogin.getText()));
+                mBox.setAmountOPen(Double.parseDouble(txtAmountOpening.getText()));
+                if (cBox.insertBox(mBox)) {
+                    new rojerusan.RSNotifyAnimated("SUCCESS", "CAJA APERTURADA AHORA PUEDES REALIZAR TUS VENTAS CON REALIDAD",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
-                    getCustomer("");
-                    ConnectionDB cn = new ConnectionDB();
-                    cn.closeConection();
-                    clearImputs();
+                    this.dispose();
+                    ConnectionDB c = new ConnectionDB();
+                    c.closeConection();
                 } else {
-                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO REGISTRAR EL CLIENTE, POR FAVOR VERIFICA LOS DATOS QUE HAS INGRESADO SON CORRRECTOS",
+                    new rojerusan.RSNotifyAnimated("ERROR", "AL SALIO MAL",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                    ConnectionDB c = new ConnectionDB();
+                    c.closeConection();
                 }
-            } else if(accion.equals("updatedata")) {
-                mCustomer.setId(Integer.parseInt(idUpdateData.getText()));
-                if (cCustomer.updateCustomer(mCustomer)) {
-                    new rojerusan.RSNotifyAnimated("FELICIDADES", "LOS DATOS DEL CLIENTE " + txtFullName.getText() + "SE HAN ACTUALIZADO CON ÉXITO",
+            } else if (accion.equals("updatedata")) {
+                DateTimeFormatter dDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                mBox.setId(Integer.parseInt(idUpdateData.getText()));
+                mBox.setClodingDate(dDateTime.format(LocalDateTime.now()));
+                mBox.setAmountClosing(Double.parseDouble(txtAmountClosing.getText()));
+                mBox.setAmountTransfer(Double.parseDouble(txtAmountTransfer.getText()));
+                mBox.setAmountCheque(Double.parseDouble(txtAmountCheque.getText()));
+                mBox.setAmountCash(Double.parseDouble(txtAmountCash.getText()));
+                mBox.setAmountVisa(Double.parseDouble(txtAmountVisa.getText()));
+                if (cBox.updateBox(mBox)) {
+                    new rojerusan.RSNotifyAnimated("SUCCESS", "HAS CERRADO LA CAJA CON ÉXITO",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
-                    getCustomer("");
-                    ConnectionDB cn = new ConnectionDB();
-                    cn.closeConection();
+                    this.dispose();
+                    ConnectionDB c = new ConnectionDB();
+                    c.closeConection();
                 } else {
-                    new rojerusan.RSNotifyAnimated("ERROR", "NO HEMOS PODIDO ACTUALIZAR LOS DATOS DEL CLIENTE, INTENTALO MAS TARDE",
+                    new rojerusan.RSNotifyAnimated("ERROR AL CERRAR", "AL SALIO MAL",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                    ConnectionDB c = new ConnectionDB();
+                    c.closeConection();
                 }
-                this.dispose();
             }
-        } catch (SQLException e) {
+        } catch (NumberFormatException | SQLException e) {
             System.out.println(e);
         }
-
     }//GEN-LAST:event_btnRegisterActionPerformed
 
-    private void txtFullNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFullNameKeyReleased
+    private void txtAmountOpeningKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountOpeningKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFullNameKeyReleased
+    }//GEN-LAST:event_txtAmountOpeningKeyReleased
 
-    private void txtFullNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFullNameKeyTyped
+    private void txtAmountOpeningKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountOpeningKeyTyped
 
-    }//GEN-LAST:event_txtFullNameKeyTyped
+    }//GEN-LAST:event_txtAmountOpeningKeyTyped
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
+    private void txtAmountClosingKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountClosingKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailKeyReleased
+    }//GEN-LAST:event_txtAmountClosingKeyReleased
 
-    private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
+    private void txtAmountClosingKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountClosingKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailKeyTyped
+    }//GEN-LAST:event_txtAmountClosingKeyTyped
 
-    private void txtAdressKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAdressKeyReleased
+    private void txtAmountChequeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountChequeKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAdressKeyReleased
+    }//GEN-LAST:event_txtAmountChequeKeyReleased
 
-    private void txtAdressKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAdressKeyTyped
+    private void txtAmountChequeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountChequeKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAdressKeyTyped
+    }//GEN-LAST:event_txtAmountChequeKeyTyped
 
-    private void txtNumberDocumentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberDocumentKeyReleased
+    private void txtAmountTransferKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountTransferKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumberDocumentKeyReleased
+    }//GEN-LAST:event_txtAmountTransferKeyReleased
 
-    private void txtNumberDocumentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumberDocumentKeyTyped
+    private void txtAmountTransferKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountTransferKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumberDocumentKeyTyped
+    }//GEN-LAST:event_txtAmountTransferKeyTyped
+
+    private void txtAmountVisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountVisaKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAmountVisaKeyReleased
+
+    private void txtAmountVisaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountVisaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAmountVisaKeyTyped
+
+    private void txtAmountCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountCashKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAmountCashKeyReleased
+
+    private void txtAmountCashKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountCashKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAmountCashKeyTyped
 
     /**
      * @param args the command line arguments
@@ -399,13 +523,13 @@ public class RgtCustomer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtOpenBox.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtOpenBox.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtOpenBox.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RgtCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RgtOpenBox.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -16795,7 +16919,7 @@ public class RgtCustomer extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RgtCustomer().setVisible(true);
+                new RgtOpenBox().setVisible(true);
             }
         });
     }
@@ -16804,16 +16928,17 @@ public class RgtCustomer extends javax.swing.JFrame {
     public static rojerusan.RSButtonHover btnClose;
     private rojerusan.RSButtonCircle btnCloseModal;
     public static rojerusan.RSButtonHover btnRegister;
-    public static RSMaterialComponent.RSComboBoxMaterial cbxTypeDocument;
     public static javax.swing.JLabel idUpdateData;
     private javax.swing.JPanel jPanel2;
     public static javax.swing.JLabel lblTitleModal;
     private javax.swing.JPanel panelBackground;
     private main.PanelRound panelRound1;
-    public static RSMaterialComponent.RSTextFieldMaterial txtAdress;
-    public static RSMaterialComponent.RSTextFieldMaterial txtEmail;
-    public static RSMaterialComponent.RSTextFieldMaterial txtFullName;
-    public static RSMaterialComponent.RSTextFieldMaterial txtNumberDocument;
+    public static RSMaterialComponent.RSTextFieldMaterial txtAmountCash;
+    public static RSMaterialComponent.RSTextFieldMaterial txtAmountCheque;
+    public static RSMaterialComponent.RSTextFieldMaterial txtAmountClosing;
+    public static RSMaterialComponent.RSTextFieldMaterial txtAmountOpening;
+    public static RSMaterialComponent.RSTextFieldMaterial txtAmountTransfer;
+    public static RSMaterialComponent.RSTextFieldMaterial txtAmountVisa;
     // End of variables declaration//GEN-END:variables
 
     class backgorundPanels extends JPanel {

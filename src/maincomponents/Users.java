@@ -17,7 +17,6 @@ public class Users extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         subMenuUsuarios = new rojerusan.RSButtonIconI();
-        subMenuPagosAlPersonal = new rojerusan.RSButtonIconI();
         mainDesktop = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(241, 246, 249));
@@ -37,25 +36,6 @@ public class Users extends javax.swing.JPanel {
             }
         });
 
-        subMenuPagosAlPersonal.setBackground(new java.awt.Color(241, 246, 249));
-        subMenuPagosAlPersonal.setForeground(new java.awt.Color(28, 60, 84));
-        subMenuPagosAlPersonal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/check.png"))); // NOI18N
-        subMenuPagosAlPersonal.setText("Pagos");
-        subMenuPagosAlPersonal.setColorHover(new java.awt.Color(226, 236, 242));
-        subMenuPagosAlPersonal.setColorText(new java.awt.Color(28, 60, 84));
-        subMenuPagosAlPersonal.setColorTextHover(new java.awt.Color(44, 88, 120));
-        subMenuPagosAlPersonal.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        subMenuPagosAlPersonal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                subMenuPagosAlPersonalMouseClicked(evt);
-            }
-        });
-        subMenuPagosAlPersonal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subMenuPagosAlPersonalActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -63,17 +43,13 @@ public class Users extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(subMenuUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(subMenuPagosAlPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1016, Short.MAX_VALUE))
+                .addContainerGap(1118, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(subMenuUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(subMenuPagosAlPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(subMenuUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -110,26 +86,14 @@ public class Users extends javax.swing.JPanel {
 
     private void subMenuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuUsuariosActionPerformed
         subMenuUsuarios.setBackground(new Color(226, 236, 242));
-        subMenuPagosAlPersonal.setBackground(new Color(241, 246, 249));
         new ChangePanel(mainDesktop, new WindowUser());
     }//GEN-LAST:event_subMenuUsuariosActionPerformed
-
-    private void subMenuPagosAlPersonalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subMenuPagosAlPersonalMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_subMenuPagosAlPersonalMouseClicked
-
-    private void subMenuPagosAlPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuPagosAlPersonalActionPerformed
-        subMenuPagosAlPersonal.setBackground(new Color(226, 236, 242));
-        subMenuUsuarios.setBackground(new Color(241, 246, 249));
-//        new ChangePanel(mainDesktop, new WindowPaymentUser());
-    }//GEN-LAST:event_subMenuPagosAlPersonalActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel mainDesktop;
-    public static rojerusan.RSButtonIconI subMenuPagosAlPersonal;
     public static rojerusan.RSButtonIconI subMenuUsuarios;
     // End of variables declaration//GEN-END:variables
 }

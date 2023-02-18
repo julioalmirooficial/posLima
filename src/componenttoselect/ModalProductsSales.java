@@ -11,6 +11,7 @@ public class ModalProductsSales extends javax.swing.JFrame {
 
     public static String discount = "0";
     public static String pQuantity = "0";
+    public static String stock = "0";
 
     public ModalProductsSales() {
         initComponents();
@@ -249,6 +250,7 @@ public class ModalProductsSales extends javax.swing.JFrame {
             
 
             componentsregistry.QuantitySales.discount = listProducts.getValueAt(fila, 5).toString(); // DEXCEUNTO
+            componentsregistry.QuantitySales.stock = listProducts.getValueAt(fila, 3).toString(); // DEXCEUNTO
             new componentsregistry.QuantitySales(null, true).setVisible(true);
             if(Double.parseDouble(pQuantity) <= 0) {
                 return;

@@ -188,7 +188,7 @@ public class ControllerProducts {
 
         query = "SELECT  p.id, p.bar_code, p.title, p.stock, p.price_sale,p.for_stock,p.discount "
                 + "FROM products p "
-                + "WHERE CONCAT(p.title, ' ',p.bar_code)like '%" + search + "%' AND state = 1 ORDER BY p.id DESC LIMIT 30";
+                + "WHERE CONCAT(p.title, ' ',p.bar_code)like '%" + search + "%' AND state = 1 AND  p.stock > 0  ORDER BY p.id DESC LIMIT 30";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(query);

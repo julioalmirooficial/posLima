@@ -1,10 +1,11 @@
 package components;
 
+import componentsregistry.RgtOpenBox;
 import componenttoselect.ModalProductsSales;
+import controller.ControllerBox;
 import controller.ControllerCustomer;
 import controller.ControllerGetNumberVoucher;
 import controller.ControllerSales;
-import controller.ControllerShopping;
 import controllerpublic.ChangePanel;
 import controllerpublic.UIComboBox;
 import controllerpublic.cbxVouchers;
@@ -15,14 +16,12 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import main.Home;
 import maincomponents.Sales;
-import maincomponents.Shopping;
 import model.ModelCustomer;
 import model.ModelDetailSales;
-import model.ModelDetailShopping;
 import model.ModelSales;
-import model.ModelShopping;
 import model.ModelVoucher;
 import rojerusan.RSNotifyAnimated;
+import vouchers.TicketSalesPDF;
 
 public class WindowSales extends javax.swing.JPanel {
 
@@ -110,6 +109,7 @@ public class WindowSales extends javax.swing.JPanel {
         txtAmountReturn = new rojeru_san.rsfield.RSTextFullRound();
         jLabel8 = new javax.swing.JLabel();
         btnDelete = new rojerusan.RSButtonIconI();
+        rSButtonHover1 = new rojerusan.RSButtonHover();
 
         jPanel1.setBackground(new java.awt.Color(241, 246, 249));
 
@@ -342,9 +342,6 @@ public class WindowSales extends javax.swing.JPanel {
                     .addComponent(txtEntityBank, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtNumberOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelRound1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelRound1Layout.createSequentialGroup()
                         .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panelRound1Layout.createSequentialGroup()
                                 .addComponent(idCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -360,7 +357,10 @@ public class WindowSales extends javax.swing.JPanel {
                                 .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
                                 .addComponent(lblIGV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelRound1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelRound1Layout.setVerticalGroup(
@@ -431,6 +431,18 @@ public class WindowSales extends javax.swing.JPanel {
             }
         });
 
+        rSButtonHover1.setBackground(new java.awt.Color(223, 231, 237));
+        rSButtonHover1.setForeground(new java.awt.Color(28, 60, 84));
+        rSButtonHover1.setText("Caja");
+        rSButtonHover1.setColorHover(new java.awt.Color(199, 199, 199));
+        rSButtonHover1.setColorText(new java.awt.Color(28, 60, 84));
+        rSButtonHover1.setColorTextHover(new java.awt.Color(28, 60, 84));
+        rSButtonHover1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonHover1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -444,19 +456,16 @@ public class WindowSales extends javax.swing.JPanel {
                         .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(135, 135, 135))
-                            .addComponent(txtAmountPaid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtAmountPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(135, 135, 135))
-                            .addComponent(txtAmountReturn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAmountReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rSButtonHover1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -492,7 +501,8 @@ public class WindowSales extends javax.swing.JPanel {
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtAmountPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(rSButtonHover1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtAmountReturn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -518,6 +528,26 @@ public class WindowSales extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSearchProductsActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+
+        try {
+            ControllerBox box = new ControllerBox();
+            if (box.getClosedDate(Home.idUserLogin.getText())) {
+                new rojerusan.RSNotifyAnimated("ERROR", "LO SENTIMOS NO PODEMOS REALIZAR MAS VENTAS DEBIDO A QUE YA CERRASTE LA CAJA",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                return;
+            }
+            if (!box.validateBoxOpening(Home.idUserLogin.getText())) {
+                new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR APERTURA LA CAJA PARA PODER RELIZAR LAS VENTAS",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                return;
+            }
+            ConnectionDB c = new ConnectionDB();
+            c.closeConection();
+        } catch (SQLException e) {
+        }
+
         if (listProducts.getRowCount() <= 0) {
             new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA LOS PRODUCTOS PARA REALIZAR LA VENTA",
                     5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
@@ -593,6 +623,8 @@ public class WindowSales extends javax.swing.JPanel {
                 mVoucher.setId(Integer.parseInt(idVoucher.getText()));
                 mVoucher.setNumberCurrent(String.valueOf(voucherData.get(0)));
                 cNumberVoucher.updateVouchers(mVoucher);
+                TicketSalesPDF print = new TicketSalesPDF();
+                print.ticket(cSales.lastIDSales());
                 ConnectionDB c = new ConnectionDB();
                 c.closeConection();
                 new ChangePanel(Sales.mainDesktop, new WindowSales());
@@ -712,22 +744,31 @@ public class WindowSales extends javax.swing.JPanel {
                     mCustomer.setEmail("");
                     mCustomer.setFullName(txtFullName.getText());
                     mCustomer.setNumberDocument(txtNumberDocument.getText());
-                    if (txtNumberDocument.getText().length() == 8) {
+                    if (txtNumberDocument.getText().length() <= 8) {
                         mCustomer.setTypeDocument("DNI");
-                    } else if (txtNumberDocument.getText().length() == 11) {
+                    } else if (txtNumberDocument.getText().length() > 8 && txtNumberDocument.getText().length() <= 11) {
                         mCustomer.setTypeDocument("RUC");
-                    } else if (txtNumberDocument.getText().length() == 11) {
+                    } else if (txtNumberDocument.getText().length() > 11) {
                         mCustomer.setTypeDocument("PASAPORTE");
                     }
                     cCustomer.insertCustomer(mCustomer);
+                    data = cCustomer.searchCustomerSale(txtNumberDocument.getText());
+                    idCustomer.setText(String.valueOf(data.get(0)));
+                    txtFullName.setText(String.valueOf(data.get(1)));
+                    txtAdress.setText(String.valueOf(data.get(2)));
+                    txtNumberDocument.setText(String.valueOf(data.get(3)));
                     new rojerusan.RSNotifyAnimated("SUCCESS", "FELICIDADES HEMOS REGISTRADO UN CLIENTE NUEVO A LA BASE DE DATOS",
                             5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                             RSNotifyAnimated.TypeNotify.SUCCESS).setVisible(true);
+                    ConnectionDB c = new ConnectionDB();
+                    c.closeConection();
                 }
                 idCustomer.setText(String.valueOf(data.get(0)));
                 txtFullName.setText(String.valueOf(data.get(1)));
                 txtAdress.setText(String.valueOf(data.get(2)));
                 txtNumberDocument.setText(String.valueOf(data.get(3)));
+                ConnectionDB c = new ConnectionDB();
+                c.closeConection();
             } catch (Exception e) {
             }
         }
@@ -757,6 +798,11 @@ public class WindowSales extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void rSButtonHover1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonHover1ActionPerformed
+        RgtOpenBox c = new RgtOpenBox();
+        c.setVisible(true);
+    }//GEN-LAST:event_rSButtonHover1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSButtonIconI btnAdd;
@@ -783,6 +829,7 @@ public class WindowSales extends javax.swing.JPanel {
     public static javax.swing.JLabel lblTotal;
     public static rojerusan.RSTableMetro listProducts;
     private main.PanelRound panelRound1;
+    private rojerusan.RSButtonHover rSButtonHover1;
     public static RSMaterialComponent.RSTextFieldMaterial txtAdress;
     private rojeru_san.rsfield.RSTextFullRound txtAmountPaid;
     private rojeru_san.rsfield.RSTextFullRound txtAmountReturn;

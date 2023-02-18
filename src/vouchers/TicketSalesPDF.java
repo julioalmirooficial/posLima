@@ -11,12 +11,12 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.Barcode128;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import controllerpublic.CurrencyFormat;
 import database.ConnectionDB;
+import env.Env;
 import java.awt.HeadlessException;
 import java.awt.print.PrinterException;
 import java.io.FileOutputStream;
@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
@@ -42,72 +41,36 @@ public class TicketSalesPDF {
 
     CurrencyFormat currencys = new CurrencyFormat();
 
-    public void ticket(String idSale, String idStore) {
-        String numberVoucher = null;
-        String query = "SELECT e.nombre AS nombreempresas, e.direccion AS direccionesempresa, "
-                + "CONCAT(e.telefono_uno,' ', e.telefono_dos) AS telefonosempresa, e.ruc AS empresaruc,  "
-                + "e.lema, tc.descripcion AS nombrecomprobantes, CONCAT(v.serie_comprobante,' ', v.numero_comprobante) AS numerosseriecomprobante, "
-                + "c.nombres AS nombresclientes, c.direccion AS direccionesclietes, c.numero_documento AS numerodocumentocliente,  "
-                + "DATE_FORMAT(v.fecha_pago, '%d/%m/%Y %r') AS fechaventa,v.nombre_cliente_pedido,  "
-                + "dv.cantidad AS cantidadvendida, p.nombreproducto, dv.unidad_medida AS unidadmedidaventa,dv.precio_venta AS precioventaproducto, "
-                + "dv.igv AS precioigv, dv.subtotal AS preciosubtotal, dv.total AS totaldetalle,  "
-                + "v.total AS totalventageneral, v.igv AS igvventageneral, v.subtotal AS subtotalventageneral, v.igv_aplicado,  "
-                + "v.descripcion_moneda AS divisaventa, v.prefijo_moneda, tp.descripcion AS tipopagoventa, tpc.descripcion AS tipopacompra,"
-                + "v.pago_importe, v.vuelto_importe, u.nombre AS nombrevendedor, pcv.parametro_agradecimiento, pcv.parametro_informacion, v.descuento, "
-                + "v.numero_referencia, v.descuentos_otros,v.comentarios,totalncredito,diferenciancredito,"
-                + "v.seller,v.numero_comprobante,v.monto_pagar_cliente_por_seguro,v.monto_pagar_empresa_por_seguro  "
-                + "FROM ventas v "
-                + "INNER JOIN detalle_venta dv ON "
-                + "dv.idventa = v.id "
-                + "INNER JOIN clientes c ON "
-                + "c.id = v.idcliente "
-                + "INNER JOIN productos p ON "
-                + "p.id = dv.idproducto "
-                + "INNER JOIN almacen a ON "
-                + "a.id = v.idalmacen "
-                + "INNER JOIN empresa e ON "
-                + "e.id = a.idempresa "
-                + "INNER JOIN comprobantes cv ON "
-                + "cv.id = v.idcomprobante "
-                + "INNER JOIN tipo_comprobante tc ON "
-                + "tc.id = cv.idtipo_comprobante "
-                + "INNER JOIN tipo_pago_venta tp ON "
-                + "tp.id = v.idtipo_pago "
-                + "INNER JOIN tipo_pago_compra tpc ON "
-                + "tpc.id = v.idtipo_venta_compra "
-                + "INNER JOIN usuarios u ON "
-                + "u.id = v.idvendedor "
-                + "INNER JOIN parametro_comprobantes pcv ON "
-                + "pcv.idcomprobante = cv.id "
-                + "WHERE v.id = " + idSale + " AND v.idalmacen = " + idStore;
-        //NEW
-        int countCompanyAseguradora = 0;
-        String querySeguros = "SELECT ea.razon_social  "
-                + "FROM cuentas_por_cobrar_seguros c "
-                + "INNER JOIN empresas_aseguradoras ea ON "
-                + "ea.id = c.idempresa_aseguradora WHERE c.idventa = " + idSale;
-        String nameCompanies = "";
-        //NEW
-        try {
-
-            Statement stLainghtHeight = cn.createStatement();
-            ResultSet rsLainghtHeight = stLainghtHeight.executeQuery(querySeguros);
-            while (rsLainghtHeight.next()) {
-                countCompanyAseguradora++;
-                if (countCompanyAseguradora > 0) {
-                    nameCompanies = rsLainghtHeight.getString("ea.razon_social");
-                }
-            }
-        } catch (SQLException e) {
-        }
+    public void ticket(String idSale) {
+        String query = "SELECT e.name_company,e.adress, e.cellphone, e.email, e.ruc,v.number_voucher, v.serie,cv.voucher, "
+                + "c.full_name, c.adress, c.number_document, v.date_emit, v.type_payment, "
+                + "dv.quantity, dv.unit_measure, dv.price_unit, dv.total,dv.discount, "
+                + "v.subtotal, v.igv, v.iva_aplicate, v.total, u.full_name, v.amount_paid, v.amount_returned,p.title "
+                + "FROM sales v "
+                + "INNER JOIN details_sales dv ON "
+                + "dv.idsale = v.id "
+                + "INNER JOIN products p ON "
+                + "p.id = dv.idproduct "
+                + "INNER JOIN customer c ON "
+                + "c.id = v.idcustomer "
+                + "INNER JOIN users u ON "
+                + "u.id = v.iduser "
+                + "INNER JOIN vouchers cv ON "
+                + "cv.id = v.idvoucher "
+                + "INNER JOIN company e  "
+                + "WHERE v.id = " + idSale;
 
         int countLinesHeight = 0;
+        Env env = new Env();
+        String nameCustomerVoucher = null;
         try {
 
             Statement stLainghtHeight = cn.createStatement();
             ResultSet rsLainghtHeight = stLainghtHeight.executeQuery(query);
             while (rsLainghtHeight.next()) {
-                countLinesHeight += 33;
+                countLinesHeight += 33; 
+                nameCustomerVoucher = rsLainghtHeight.getString("c.full_name") +" "+rsLainghtHeight.getString("v.serie") +" "+ rsLainghtHeight.getString("v.number_voucher") ;
+
             }
         } catch (SQLException e) {
         }
@@ -115,12 +78,12 @@ public class TicketSalesPDF {
         Rectangle two = new Rectangle(210, 700 + countLinesHeight);
         Document document = new Document(two, 9f, 9f, 7f, 7f);
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("D:\\sistemapos/comprobantes/TICKET.pdf");
-            PdfWriter pdf = PdfWriter.getInstance(document, fileOutputStream);
+            FileOutputStream fileOutputStream = new FileOutputStream(env.URL_SERVER_FILES + "comprobantes/TICKET "+nameCustomerVoucher+".pdf");
+            PdfWriter.getInstance(document, fileOutputStream);
             document.open();
 
             Image image = null;
-            image = Image.getInstance("D:\\sistemapos/logo/logo-pdf.png");
+            image = Image.getInstance(env.URL_SERVER_FILES + "logo/logo-pdf.png");
             image.scaleAbsolute(70f, 50f);
             image.setAbsolutePosition(50f, 10f);
 
@@ -161,52 +124,50 @@ public class TicketSalesPDF {
                 while (rs.next()) {
                     contadorHeader++;
                     if (contadorHeader <= 1) {
-                        numberVoucher = rs.getString("v.numero_comprobante");
-                        PdfPCell nombreEmpresa = new PdfPCell(new Phrase(rs.getString("nombreempresas"), fuenteDescripcionTablasBOLD));
-                        nombreEmpresa.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        nombreEmpresa.setBorder(0);
-                        PdfPCell tipoComprobante = new PdfPCell(new Phrase("RNC " + rs.getString("empresaruc"), fuenteDescripcionTablasBOLD));
-                        tipoComprobante.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        tipoComprobante.setBorder(0);
+                        PdfPCell company = new PdfPCell(new Phrase(rs.getString("e.name_company"), fuenteDescripcionTablasBOLD));
+                        company.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        company.setBorder(0);
 
-                        PdfPCell direccionEmpresa = new PdfPCell(new Phrase(rs.getString("direccionesempresa"), fuenteDescripcionTablasLIGHT));
-                        direccionEmpresa.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        direccionEmpresa.setBorder(0);
-                        PdfPCell numeroComprobante = new PdfPCell(new Phrase(rs.getString("nombrecomprobantes"), fuenteDescripcionTablasBOLD));
-                        numeroComprobante.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        numeroComprobante.setBorder(0);
+                        PdfPCell adress = new PdfPCell(new Phrase(rs.getString("e.adress"), fuenteDescripcionTablasLIGHT));
+                        adress.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        adress.setBorder(0);
 
-                        PdfPCell telefonoEmpresa = new PdfPCell(new Phrase(rs.getString("telefonosempresa"), fuenteDescripcionTablasLIGHT));
-                        telefonoEmpresa.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        telefonoEmpresa.setBorder(0);
-                        PdfPCell fechaEmision = new PdfPCell(new Phrase(rs.getString("numerosseriecomprobante"), fuenteDescripcionTablasBOLD));
-                        fechaEmision.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        fechaEmision.setBorder(0);
+                        PdfPCell cellPhone = new PdfPCell(new Phrase(rs.getString("e.cellphone"), fuenteDescripcionTablasLIGHT));
+                        cellPhone.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cellPhone.setBorder(0);
 
-                        PdfPCell lema = new PdfPCell(new Phrase(rs.getString("lema"), fuenteDescripcionTablasLIGHT));
-                        lema.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        lema.setBorder(0);
-                        PdfPCell colNumberReference = new PdfPCell(new Phrase("N° REF. " + rs.getString("v.numero_referencia"), fuenteDescripcionTablasBOLD));
-                        colNumberReference.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        colNumberReference.setBorder(0);
+                        PdfPCell email = new PdfPCell(new Phrase(rs.getString("e.email"), fuenteDescripcionTablasLIGHT));
+                        email.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        email.setBorder(0);
+
+                        PdfPCell ruc = new PdfPCell(new Phrase("RUC " + rs.getString("e.ruc"), fuenteDescripcionTablasBOLD));
+                        ruc.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        ruc.setBorder(0);
+
+                        PdfPCell typeVoucher = new PdfPCell(new Phrase(rs.getString("cv.voucher"), fuenteDescripcionTablasBOLD));
+                        typeVoucher.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        typeVoucher.setBorder(0);
+
+                        PdfPCell numberVoucher = new PdfPCell(new Phrase(rs.getString("serie") + " " + rs.getString("v.number_voucher"), fuenteDescripcionTablasBOLD));
+                        numberVoucher.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        numberVoucher.setBorder(0);
 
                         //new code 
-                        nombreEmpresa.setPadding(0);
-                        direccionEmpresa.setPadding(0);
-                        telefonoEmpresa.setPadding(0);
-                        lema.setPadding(0);
+                        company.setPadding(0);
+                        adress.setPadding(0);
+                        cellPhone.setPadding(0);
+                        email.setPadding(0);
                         //end code
 
                         encabezado.addCell(logo);
-                        encabezado.addCell(nombreEmpresa);
-                        encabezado.addCell(direccionEmpresa);
-                        encabezado.addCell(telefonoEmpresa);
-                        encabezado.addCell(lema);
-                        encabezado.addCell(tipoComprobante);
-                        encabezado.addCell(numeroComprobante);
-                        encabezado.addCell(fechaEmision);
-                        encabezado.addCell(colNumberReference);
-
+                        encabezado.addCell(company);
+                        encabezado.addCell(adress);
+                        encabezado.addCell(cellPhone);
+                        encabezado.addCell(email);
+                        encabezado.addCell(ruc);
+                        encabezado.addCell(typeVoucher);
+                        encabezado.addCell(numberVoucher);
+                       
                     }
 
                 }
@@ -233,7 +194,7 @@ public class TicketSalesPDF {
                         nameCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         nameCustomer.setBorder(0);
                         nameCustomer.setBorderColor(BaseColor.GRAY);
-                        PdfPCell datanameCustomer = new PdfPCell(new Phrase(rs.getString("v.nombre_cliente_pedido"), fuenteDescripcionTablasLIGHT));
+                        PdfPCell datanameCustomer = new PdfPCell(new Phrase(rs.getString("c.full_name"), fuenteDescripcionTablasLIGHT));
                         datanameCustomer.setHorizontalAlignment(Element.ALIGN_LEFT);
                         datanameCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         datanameCustomer.setBorder(0);
@@ -246,7 +207,7 @@ public class TicketSalesPDF {
                         adresCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         adresCustomer.setBorder(0);
                         adresCustomer.setBorderColor(BaseColor.GRAY);
-                        PdfPCell dataadresCustomer = new PdfPCell(new Phrase(rs.getString("direccionesclietes"), fuenteDescripcionTablasLIGHT));
+                        PdfPCell dataadresCustomer = new PdfPCell(new Phrase(rs.getString("c.adress"), fuenteDescripcionTablasLIGHT));
                         dataadresCustomer.setHorizontalAlignment(Element.ALIGN_LEFT);
                         dataadresCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         dataadresCustomer.setBorder(0);
@@ -260,7 +221,7 @@ public class TicketSalesPDF {
                         documentCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         documentCustomer.setBorder(0);
                         documentCustomer.setBorderColor(BaseColor.GRAY);
-                        PdfPCell datadocumentCustomer = new PdfPCell(new Phrase(rs.getString("numerodocumentocliente"), fuenteDescripcionTablasLIGHT));
+                        PdfPCell datadocumentCustomer = new PdfPCell(new Phrase(rs.getString("c.number_document"), fuenteDescripcionTablasLIGHT));
                         datadocumentCustomer.setHorizontalAlignment(Element.ALIGN_LEFT);
                         datadocumentCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         datadocumentCustomer.setBorder(0);
@@ -273,7 +234,7 @@ public class TicketSalesPDF {
                         dateSaleCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         dateSaleCustomer.setBorder(0);
                         dateSaleCustomer.setBorderColor(BaseColor.GRAY);
-                        PdfPCell datadateSaleCustomer = new PdfPCell(new Phrase(rs.getString("fechaventa"), fuenteDescripcionTablasLIGHT));
+                        PdfPCell datadateSaleCustomer = new PdfPCell(new Phrase(rs.getString("v.date_emit"), fuenteDescripcionTablasLIGHT));
                         datadateSaleCustomer.setHorizontalAlignment(Element.ALIGN_LEFT);
                         datadateSaleCustomer.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         datadateSaleCustomer.setBorder(0);
@@ -282,65 +243,21 @@ public class TicketSalesPDF {
                         clientes.addCell(dateSaleCustomer);
                         clientes.addCell(datadateSaleCustomer);
 
-                        PdfPCell tipopago = new PdfPCell(new Phrase("Tipo de pago: ", fuenteDescripcionTablasBOLD));
-                        tipopago.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        tipopago.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        tipopago.setBorder(0);
-                        tipopago.setBorderColor(BaseColor.GRAY);
-                        PdfPCell dataTipopago = new PdfPCell(new Phrase(rs.getString("tipopagoventa"), fuenteDescripcionTablasLIGHT));
-                        dataTipopago.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        dataTipopago.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        dataTipopago.setBorder(0);
-                        dataTipopago.setBorderColor(BaseColor.GRAY);
+                        PdfPCell typePayment = new PdfPCell(new Phrase("Tipo de pago: ", fuenteDescripcionTablasBOLD));
+                        typePayment.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        typePayment.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        typePayment.setBorder(0);
+                        typePayment.setBorderColor(BaseColor.GRAY);
+                        PdfPCell dataTypePayment = new PdfPCell(new Phrase(rs.getString("v.type_payment"), fuenteDescripcionTablasLIGHT));
+                        dataTypePayment.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        dataTypePayment.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        dataTypePayment.setBorder(0);
+                        dataTypePayment.setBorderColor(BaseColor.GRAY);
 
-                        clientes.addCell(tipopago);
-                        clientes.addCell(dataTipopago);
-
-                        PdfPCell tipopagocompra = new PdfPCell(new Phrase("Tipo de venta: ", fuenteDescripcionTablasBOLD));
-                        tipopagocompra.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        tipopagocompra.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        tipopagocompra.setBorder(0);
-                        tipopagocompra.setBorderColor(BaseColor.GRAY);
-                        PdfPCell dataTipopagocompra = new PdfPCell(new Phrase(rs.getString("tipopacompra"), fuenteDescripcionTablasLIGHT));
-                        dataTipopagocompra.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        dataTipopagocompra.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        dataTipopagocompra.setBorder(0);
-                        dataTipopagocompra.setBorderColor(BaseColor.GRAY);
-                        clientes.addCell(tipopagocompra);
-                        clientes.addCell(dataTipopagocompra);
-
-                        PdfPCell nameCompaniesAseguradora = new PdfPCell(new Phrase("Aseguradora: ", fuenteDescripcionTablasBOLD));
-                        nameCompaniesAseguradora.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        nameCompaniesAseguradora.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        nameCompaniesAseguradora.setBorder(0);
-                        nameCompaniesAseguradora.setBorderColor(BaseColor.GRAY);
-                        PdfPCell nameCompaniesAseguradoraData = new PdfPCell(new Phrase(nameCompanies, fuenteDescripcionTablasLIGHT));
-                        nameCompaniesAseguradoraData.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        nameCompaniesAseguradoraData.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        nameCompaniesAseguradoraData.setBorder(0);
-                        nameCompaniesAseguradoraData.setBorderColor(BaseColor.GRAY);
-                        if (countCompanyAseguradora > 0) {
-                            clientes.addCell(nameCompaniesAseguradora);
-                            clientes.addCell(nameCompaniesAseguradoraData);
-                        }
-                        PdfPCell titlecoments = new PdfPCell(new Phrase("Nota Adicional: ", fuenteDescripcionTablasBOLD));
-                        titlecoments.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        titlecoments.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        titlecoments.setBorder(0);
-                        titlecoments.setBorderColor(BaseColor.GRAY);
-                        PdfPCell dataComents = new PdfPCell(new Phrase(rs.getString("v.comentarios"), fuenteDescripcionTablasLIGHT));
-                        dataComents.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        dataComents.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        dataComents.setBorder(0);
-                        dataComents.setBorderColor(BaseColor.GRAY);
-                        clientes.addCell(titlecoments);
-                        clientes.addCell(dataComents);
-
-                        //new code 
-                        titlecoments.setPadding(0);
-                        dataComents.setPadding(0);
-                        tipopago.setPadding(0);
-                        dataTipopago.setPadding(0);
+                        typePayment.setPaddingTop(0);
+                        dataTypePayment.setPaddingTop(0);
+                        dataTypePayment.setPaddingBottom(7);
+                        typePayment.setPaddingBottom(7);
                         dateSaleCustomer.setPadding(0);
                         datadateSaleCustomer.setPadding(0);
                         documentCustomer.setPadding(0);
@@ -349,133 +266,120 @@ public class TicketSalesPDF {
                         dataadresCustomer.setPadding(0);
                         nameCustomer.setPadding(0);
                         datanameCustomer.setPadding(0);
-                        nameCompaniesAseguradoraData.setPadding(0);
-                        nameCompaniesAseguradora.setPadding(0);
-                        //end code
+                        clientes.addCell(typePayment);
+                        clientes.addCell(dataTypePayment);
 
                     }
                 }
             } catch (SQLException e) {
+                System.out.println(e);
             }
 
             document.add(clientes);
 //            document.add(saltoLinea1);
 
-            PdfPTable ventas = new PdfPTable(5);
+            PdfPTable ventas = new PdfPTable(4);
             ventas.setWidthPercentage(100);
-            float[] medidatablaVentas = {15f, 25f, 20f, 20f, 25f};
+            float[] medidatablaVentas = {15f, 25f, 20f, 20f};
             ventas.setWidths(medidatablaVentas);
 
-            PdfPCell cantidad = new PdfPCell(new Phrase("Cant.", fuenteDescripcionTablasBOLD));
-            cantidad.setHorizontalAlignment(Element.ALIGN_LEFT);
-            cantidad.setBackgroundColor(BaseColor.WHITE);
-            cantidad.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cantidad.setBorder(0);
-            cantidad.setMinimumHeight(25);
-            cantidad.setBorderWidthTop(1);
-            cantidad.setBorderWidthBottom(1);
+            PdfPCell quantity = new PdfPCell(new Phrase("Cant.", fuenteDescripcionTablasBOLD));
+            quantity.setHorizontalAlignment(Element.ALIGN_LEFT);
+            quantity.setBackgroundColor(BaseColor.WHITE);
+            quantity.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            quantity.setBorder(0);
+            quantity.setMinimumHeight(25);
+            quantity.setBorderWidthTop(1);
+            quantity.setBorderWidthBottom(1);
 
-            PdfPCell umVentas = new PdfPCell(new Phrase("UM", fuenteDescripcionTablasBOLD));
-            umVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-            umVentas.setBackgroundColor(BaseColor.WHITE);
-            umVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            umVentas.setBorder(0);
-            umVentas.setBorderWidthTop(1);
-            umVentas.setBorderWidthBottom(1);
-            umVentas.setMinimumHeight(25);
+            PdfPCell unitMeasure = new PdfPCell(new Phrase("UM", fuenteDescripcionTablasBOLD));
+            unitMeasure.setHorizontalAlignment(Element.ALIGN_LEFT);
+            unitMeasure.setBackgroundColor(BaseColor.WHITE);
+            unitMeasure.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            unitMeasure.setBorder(0);
+            unitMeasure.setBorderWidthTop(1);
+            unitMeasure.setBorderWidthBottom(1);
+            unitMeasure.setMinimumHeight(25);
 
-            PdfPCell precioDeVentas = new PdfPCell(new Phrase("Precio", fuenteDescripcionTablasBOLD));
-            precioDeVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-            precioDeVentas.setBackgroundColor(BaseColor.WHITE);
-            precioDeVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            precioDeVentas.setMinimumHeight(25);
-            precioDeVentas.setBorder(0);
-            precioDeVentas.setBorderWidthTop(1);
-            precioDeVentas.setBorderWidthBottom(1);
-            PdfPCell igvDeVentas = new PdfPCell(new Phrase("ITBIS", fuenteDescripcionTablasBOLD));
-            igvDeVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-            igvDeVentas.setBackgroundColor(BaseColor.WHITE);
-            igvDeVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            igvDeVentas.setMinimumHeight(25);
-            igvDeVentas.setBorder(0);
-            igvDeVentas.setBorderWidthTop(1);
-            igvDeVentas.setBorderWidthBottom(1);
-            PdfPCell importeDeVentas = new PdfPCell(new Phrase("Total", fuenteDescripcionTablasBOLD));
-            importeDeVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-            importeDeVentas.setBackgroundColor(BaseColor.WHITE);
-            importeDeVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            importeDeVentas.setMinimumHeight(25);
-            importeDeVentas.setBorder(0);
-            importeDeVentas.setBorderWidthTop(1);
-            importeDeVentas.setBorderWidthBottom(1);
+            PdfPCell priceUnit = new PdfPCell(new Phrase("P.U", fuenteDescripcionTablasBOLD));
+            priceUnit.setHorizontalAlignment(Element.ALIGN_LEFT);
+            priceUnit.setBackgroundColor(BaseColor.WHITE);
+            priceUnit.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            priceUnit.setMinimumHeight(25);
+            priceUnit.setBorder(0);
+            priceUnit.setBorderWidthTop(1);
+            priceUnit.setBorderWidthBottom(1);
+            //CORREGIR 
+            PdfPCell discount = new PdfPCell(new Phrase("P.U", fuenteDescripcionTablasBOLD));
+            discount.setHorizontalAlignment(Element.ALIGN_LEFT);
+            discount.setBackgroundColor(BaseColor.WHITE);
+            discount.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            discount.setMinimumHeight(25);
+            discount.setBorder(0);
+            discount.setBorderWidthTop(1);
+            discount.setBorderWidthBottom(1);
 
-            ventas.addCell(cantidad);
-            ventas.addCell(umVentas);
-            ventas.addCell(precioDeVentas);
-            ventas.addCell(igvDeVentas);
-            ventas.addCell(importeDeVentas);
+            PdfPCell importSales = new PdfPCell(new Phrase("Total", fuenteDescripcionTablasBOLD));
+            importSales.setHorizontalAlignment(Element.ALIGN_LEFT);
+            importSales.setBackgroundColor(BaseColor.WHITE);
+            importSales.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            importSales.setMinimumHeight(25);
+            importSales.setBorder(0);
+            importSales.setBorderWidthTop(1);
+            importSales.setBorderWidthBottom(1);
+
+            ventas.addCell(quantity);
+            ventas.addCell(unitMeasure);
+            ventas.addCell(priceUnit);
+            ventas.addCell(importSales);
 
             try {
                 Statement st = cn.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next()) {
-                    PdfPCell cantidadVentas = new PdfPCell(new Phrase(rs.getString("cantidadvendida"), fuenteDescripcionTablasLIGHTSmall));
-                    cantidadVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    cantidadVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    cantidadVentas.setBorderColor(BaseColor.LIGHT_GRAY);
-                    cantidadVentas.setBorder(0);
+                    PdfPCell quantityData = new PdfPCell(new Phrase(rs.getString("dv.quantity"), fuenteDescripcionTablasLIGHTSmall));
+                    quantityData.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    quantityData.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    quantityData.setBorderColor(BaseColor.LIGHT_GRAY);
+                    quantityData.setBorder(0);
 
-                    PdfPCell descripcionProducto = new PdfPCell(new Phrase(rs.getString("nombreproducto"), fuenteDescripcionTablasLIGHTSmall));
-                    descripcionProducto.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    descripcionProducto.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    descripcionProducto.setBorderColor(BaseColor.LIGHT_GRAY);
-                    descripcionProducto.setBorder(0);
-                    descripcionProducto.setColspan(5);
-                    descripcionProducto.setPaddingBottom(7);
+                    PdfPCell descriptionProduct = new PdfPCell(new Phrase(rs.getString("p.title"), fuenteDescripcionTablasLIGHTSmall));
+                    descriptionProduct.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    descriptionProduct.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    descriptionProduct.setBorderColor(BaseColor.LIGHT_GRAY);
+                    descriptionProduct.setBorder(0);
+                    descriptionProduct.setColspan(4);
+                    descriptionProduct.setPaddingBottom(7);
 
-                    PdfPCell dataunidamedidaVentasProducto = new PdfPCell(new Phrase(rs.getString("unidadmedidaventa"), fuenteDescripcionTablasLIGHTSmall));
-                    dataunidamedidaVentasProducto.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    dataunidamedidaVentasProducto.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    dataunidamedidaVentasProducto.setBorderColor(BaseColor.LIGHT_GRAY);
-                    dataunidamedidaVentasProducto.setBorder(0);
+                    PdfPCell unitMeasureData = new PdfPCell(new Phrase(rs.getString("dv.unit_measure"), fuenteDescripcionTablasLIGHTSmall));
+                    unitMeasureData.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    unitMeasureData.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    unitMeasureData.setBorderColor(BaseColor.LIGHT_GRAY);
+                    unitMeasureData.setBorder(0);
 
-                    PdfPCell datapreciounitarioVentas = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("precioventaproducto"))).substring(1), fuenteDescripcionTablasLIGHTSmall));
-                    datapreciounitarioVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    datapreciounitarioVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    datapreciounitarioVentas.setBorderColor(BaseColor.LIGHT_GRAY);
-                    datapreciounitarioVentas.setBorder(0);
+                    PdfPCell priceUnitData = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("dv.price_unit"))).substring(1), fuenteDescripcionTablasLIGHTSmall));
+                    priceUnitData.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    priceUnitData.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    priceUnitData.setBorderColor(BaseColor.LIGHT_GRAY);
+                    priceUnitData.setBorder(0);
 
-                    PdfPCell datprecioigvVentas = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("preciosubtotal"))).substring(1), fuenteDescripcionTablasLIGHTSmall));
-                    datprecioigvVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    datprecioigvVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    datprecioigvVentas.setBorderColor(BaseColor.LIGHT_GRAY);
-                    datprecioigvVentas.setBorder(0);
+                    PdfPCell importSalesData = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("dv.total"))).substring(1), fuenteDescripcionTablasLIGHTSmall));
+                    importSalesData.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    importSalesData.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    importSalesData.setBorderColor(BaseColor.LIGHT_GRAY);
+                    importSalesData.setBorder(0);
 
-                    PdfPCell datapreciosubtotalVentas = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("precioigv"))).substring(1), fuenteDescripcionTablasLIGHTSmall));
-                    datapreciosubtotalVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    datapreciosubtotalVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    datapreciosubtotalVentas.setBorderColor(BaseColor.LIGHT_GRAY);
-                    datapreciosubtotalVentas.setBorder(0);
-
-                    PdfPCell datimportVentas = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("totaldetalle"))).substring(1), fuenteDescripcionTablasLIGHTSmall));
-                    datimportVentas.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    datimportVentas.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    datimportVentas.setBorderColor(BaseColor.LIGHT_GRAY);
-                    datimportVentas.setBorder(0);
-
-                    ventas.addCell(cantidadVentas);
-                    ventas.addCell(dataunidamedidaVentasProducto);
-                    ventas.addCell(datprecioigvVentas);
-                    ventas.addCell(datapreciosubtotalVentas);
-                    ventas.addCell(datimportVentas);
-                    ventas.addCell(descripcionProducto);
+                    ventas.addCell(quantityData);
+                    ventas.addCell(unitMeasureData);
+                    ventas.addCell(priceUnitData);
+                    ventas.addCell(importSalesData);
+                    ventas.addCell(descriptionProduct);
                 }
             } catch (SQLException e) {
+                System.out.println(e);
             }
 
             document.add(ventas);
-//            document.add(saltoLinea1);
-
             PdfPTable footer = new PdfPTable(2);
             footer.setWidthPercentage(100);
             float[] sizeFooter = {50f, 50f};
@@ -488,81 +392,26 @@ public class TicketSalesPDF {
                 while (rs.next()) {
                     contFooter++;
                     if (contFooter <= 1) {
-                        PdfPCell divisa = new PdfPCell(new Phrase("DIVISA ", fuenteDescripcionTablasBOLDSamll));
-                        divisa.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        divisa.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        divisa.setMinimumHeight(15);
-                        divisa.setBorder(0);
-                        divisa.setBorderWidthTop(1);
-                        PdfPCell datadivisa = new PdfPCell(new Phrase(rs.getString("divisaventa"), fuenteDescripcionTablasBOLDSamll));
-                        datadivisa.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        datadivisa.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        datadivisa.setMinimumHeight(15);
-                        datadivisa.setBorder(0);
-                        datadivisa.setBorderWidthTop(1);
-
-                        PdfPCell descuento = new PdfPCell(new Phrase("DESCUENTOS", fuenteDescripcionTablasBOLDSamll));
-                        descuento.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        descuento.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        descuento.setMinimumHeight(15);
-                        descuento.setBorder(0);
-                        PdfPCell datedescuento = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("v.descuento"))).substring(1) + " %", fuenteDescripcionTablasBOLDSamll));
-                        datedescuento.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        datedescuento.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        datedescuento.setMinimumHeight(15);
-                        datedescuento.setBorder(0);
-
-                        PdfPCell othersDiscounts = new PdfPCell(new Phrase("OTROS DESC.", fuenteDescripcionTablasBOLDSamll));
-                        othersDiscounts.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        othersDiscounts.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        othersDiscounts.setMinimumHeight(15);
-                        othersDiscounts.setBorder(0);
-                        PdfPCell dateothersDiscounts = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("v.descuentos_otros"))).substring(1), fuenteDescripcionTablasBOLDSamll));
-                        dateothersDiscounts.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        dateothersDiscounts.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        dateothersDiscounts.setMinimumHeight(15);
-                        dateothersDiscounts.setBorder(0);
-                        //NEW CODE 
-                        PdfPCell amountNCredit = new PdfPCell(new Phrase("NOTA DE CREDITO", fuenteDescripcionTablasBOLD));
-                        amountNCredit.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        amountNCredit.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        amountNCredit.setMinimumHeight(15);
-                        amountNCredit.setBorder(0);
-                        PdfPCell dataAmountNCredit = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("totalncredito"))).substring(1), fuenteDescripcionTablasBOLD));
-                        dataAmountNCredit.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        dataAmountNCredit.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        dataAmountNCredit.setMinimumHeight(15);
-                        dataAmountNCredit.setBorder(0);
-
-                        PdfPCell amountDiferencia = new PdfPCell(new Phrase("DIFERENCIA", fuenteDescripcionTablasBOLD));
-                        amountDiferencia.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        amountDiferencia.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        amountDiferencia.setMinimumHeight(15);
-                        amountDiferencia.setBorder(0);
-                        PdfPCell dataAmountDiferencia = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("diferenciancredito"))).substring(1), fuenteDescripcionTablasBOLD));
-                        dataAmountDiferencia.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        dataAmountDiferencia.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        dataAmountDiferencia.setMinimumHeight(15);
-                        dataAmountDiferencia.setBorder(0);
-                        //END CODE
 
                         PdfPCell subtotal = new PdfPCell(new Phrase("SUB TOTAL", fuenteDescripcionTablasBOLDSamll));
                         subtotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         subtotal.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         subtotal.setMinimumHeight(15);
                         subtotal.setBorder(0);
-                        PdfPCell datasubtotal = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("subtotalventageneral"))).substring(1), fuenteDescripcionTablasBOLDSamll));
+                        subtotal.setBorderWidthTop(1);
+                        PdfPCell datasubtotal = new PdfPCell(new Phrase("S/" + currencys.formatCurrency(Double.parseDouble(rs.getString("v.subtotal"))).substring(1), fuenteDescripcionTablasBOLDSamll));
                         datasubtotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         datasubtotal.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         datasubtotal.setMinimumHeight(15);
                         datasubtotal.setBorder(0);
+                        datasubtotal.setBorderWidthTop(1);
 
-                        PdfPCell igvtotal = new PdfPCell(new Phrase("ITBIS " + rs.getString("igv_aplicado") + " %", fuenteDescripcionTablasBOLDSamll));
-                        igvtotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        igvtotal.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        igvtotal.setMinimumHeight(15);
-                        igvtotal.setBorder(0);
-                        PdfPCell dataigvtotal = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("igvventageneral"))).substring(1), fuenteDescripcionTablasBOLDSamll));
+                        PdfPCell igv = new PdfPCell(new Phrase("IGV " + rs.getString("v.iva_aplicate") + " %", fuenteDescripcionTablasBOLDSamll));
+                        igv.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        igv.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        igv.setMinimumHeight(15);
+                        igv.setBorder(0);
+                        PdfPCell dataigvtotal = new PdfPCell(new Phrase("S/" + currencys.formatCurrency(Double.parseDouble(rs.getString("v.igv"))).substring(1), fuenteDescripcionTablasBOLDSamll));
                         dataigvtotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         dataigvtotal.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         dataigvtotal.setMinimumHeight(15);
@@ -574,94 +423,34 @@ public class TicketSalesPDF {
                         ventatotal.setMinimumHeight(15);
                         ventatotal.setBorder(0);
 
-                        PdfPCell dataventatotal = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("totalventageneral"))).substring(1), fuenteDescripcionTablasBOLD));
+                        PdfPCell dataventatotal = new PdfPCell(new Phrase("S/" + currencys.formatCurrency(Double.parseDouble(rs.getString("v.total"))).substring(1), fuenteDescripcionTablasBOLD));
                         dataventatotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         dataventatotal.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         dataventatotal.setMinimumHeight(15);
                         dataventatotal.setBorder(0);
 
-                        //MONTO CON SEGURO
-                        PdfPCell totalPagarPorCliente = new PdfPCell(new Phrase("CLIENTE", fuenteDescripcionTablasBOLDSamll));
-                        totalPagarPorCliente.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        totalPagarPorCliente.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        totalPagarPorCliente.setMinimumHeight(15);
-                        totalPagarPorCliente.setBorder(0);
-                        totalPagarPorCliente.setBorderWidthTop(1);
-                        totalPagarPorCliente.setPaddingTop(5);
-                        totalPagarPorCliente.setBorderColor(BaseColor.LIGHT_GRAY);
-
-                        PdfPCell totalPagarPorClienteData = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("v.monto_pagar_cliente_por_seguro"))).substring(1), fuenteDescripcionTablasBOLD));
-                        totalPagarPorClienteData.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        totalPagarPorClienteData.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        totalPagarPorClienteData.setMinimumHeight(15);
-                        totalPagarPorClienteData.setBorder(0);
-                        totalPagarPorClienteData.setBorderWidthTop(1);
-                        totalPagarPorClienteData.setPaddingTop(5);
-                        totalPagarPorClienteData.setBorderColor(BaseColor.LIGHT_GRAY);
-
-                        PdfPCell totalPagarPorEmpresa = new PdfPCell(new Phrase("ASEGURADORA", fuenteDescripcionTablasBOLDSamll));
-                        totalPagarPorEmpresa.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        totalPagarPorEmpresa.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        totalPagarPorEmpresa.setMinimumHeight(15);
-                        totalPagarPorEmpresa.setBorder(0);
-
-                        PdfPCell totalPagarPorEmpresaData = new PdfPCell(new Phrase(rs.getString("prefijo_moneda") + " " + currencys.formatCurrency(Double.parseDouble(rs.getString("v.monto_pagar_empresa_por_seguro"))).substring(1), fuenteDescripcionTablasBOLD));
-                        totalPagarPorEmpresaData.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        totalPagarPorEmpresaData.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        totalPagarPorEmpresaData.setMinimumHeight(15);
-                        totalPagarPorEmpresaData.setBorder(0);
-                        //MONTO CON SEGURO
-                        //new code
-                        divisa.setPadding(0);
-                        datadivisa.setPadding(0);
-                        descuento.setPadding(0);
-                        datedescuento.setPadding(0);
-                        othersDiscounts.setPadding(0);
-                        dateothersDiscounts.setPadding(0);
-                        amountNCredit.setPadding(0);
-                        dataAmountNCredit.setPadding(0);
-                        amountDiferencia.setPadding(0);
-                        dataAmountDiferencia.setPadding(0);
                         subtotal.setPadding(0);
                         datasubtotal.setPadding(0);
-                        igvtotal.setPadding(0);
+                        igv.setPadding(0);
                         dataigvtotal.setPadding(0);
                         ventatotal.setPadding(0);
                         dataventatotal.setPadding(0);
-                        // end code
 
-                        footer.addCell(divisa);
-                        footer.addCell(datadivisa);
-                        footer.addCell(descuento);
-                        footer.addCell(datedescuento);
-                        footer.addCell(othersDiscounts);
-                        footer.addCell(dateothersDiscounts);
-                        if (Double.parseDouble(rs.getString("totalncredito")) > 0) {
-                            footer.addCell(amountNCredit);
-                            footer.addCell(dataAmountNCredit);
-                            footer.addCell(amountDiferencia);
-                            footer.addCell(dataAmountDiferencia);
-                        }
                         footer.addCell(subtotal);
                         footer.addCell(datasubtotal);
-                        footer.addCell(igvtotal);
+                        footer.addCell(igv);
                         footer.addCell(dataigvtotal);
                         footer.addCell(ventatotal);
                         footer.addCell(dataventatotal);
-                        if (Double.parseDouble(rs.getString("v.monto_pagar_cliente_por_seguro")) > 0) {
-                            footer.addCell(totalPagarPorCliente);
-                            footer.addCell(totalPagarPorClienteData);
-                            footer.addCell(totalPagarPorEmpresa);
-                            footer.addCell(totalPagarPorEmpresaData);
-                        }
                     }
                 }
 
             } catch (SQLException e) {
+                System.out.println(e);
             }
 
             document.add(footer);
-//            document.add(saltoLinea1);
+            document.add(saltoLinea1);
 
             PdfPTable footerAdicional = new PdfPTable(2);
             footerAdicional.setWidthPercentage(100);
@@ -675,66 +464,48 @@ public class TicketSalesPDF {
                 while (rs.next()) {
                     contFooterAdicional++;
                     if (contFooterAdicional <= 1) {
-                        PdfPCell vendedor = new PdfPCell(new Phrase("Cajero", fuenteDescripcionTablasBOLD));
-                        vendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        vendedor.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        vendedor.setBorder(0);
-                        vendedor.setBorderWidthTop(1);
-                        PdfPCell nombrevendedor = new PdfPCell(new Phrase(rs.getString("nombrevendedor"), fuenteDescripcionTablasBOLDSamll));
-                        nombrevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        nombrevendedor.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        nombrevendedor.setBorder(0);
-                        nombrevendedor.setBorderWidthTop(1);
-                        //CHANGE
                         PdfPCell SELLER = new PdfPCell(new Phrase("Vendedor", fuenteDescripcionTablasBOLD));
                         SELLER.setHorizontalAlignment(Element.ALIGN_LEFT);
                         SELLER.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         SELLER.setBorder(0);
-                        PdfPCell NAMESELLER = new PdfPCell(new Phrase(rs.getString("v.seller"), fuenteDescripcionTablasBOLDSamll));
+                        PdfPCell NAMESELLER = new PdfPCell(new Phrase(rs.getString("u.full_name"), fuenteDescripcionTablasBOLDSamll));
                         NAMESELLER.setHorizontalAlignment(Element.ALIGN_LEFT);
                         NAMESELLER.setVerticalAlignment(Element.ALIGN_MIDDLE);
                         NAMESELLER.setBorder(0);
 
-                        PdfPCell nombreimporte = new PdfPCell(new Phrase("Importe   " + rs.getString("prefijo_moneda"), fuenteDescripcionTablasBOLD));
-                        nombreimporte.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        nombreimporte.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        nombreimporte.setBorder(0);
-                        PdfPCell montoimporte = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("pago_importe"))).substring(1), fuenteDescripcionTablasBOLDSamll));
-                        montoimporte.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        montoimporte.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        montoimporte.setBorder(0);
+                        PdfPCell titleImport = new PdfPCell(new Phrase("Importe", fuenteDescripcionTablasBOLD));
+                        titleImport.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        titleImport.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        titleImport.setBorder(0);
+                        PdfPCell dataTitleImport = new PdfPCell(new Phrase("S/" + currencys.formatCurrency(Double.parseDouble(rs.getString("v.amount_paid"))).substring(1), fuenteDescripcionTablasBOLDSamll));
+                        dataTitleImport.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        dataTitleImport.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        dataTitleImport.setBorder(0);
 
-                        PdfPCell nombrevuelto = new PdfPCell(new Phrase("Devuelta   " + rs.getString("prefijo_moneda"), fuenteDescripcionTablasBOLD));
-                        nombrevuelto.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        nombrevuelto.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        nombrevuelto.setBorder(0);
+                        PdfPCell titleReturn = new PdfPCell(new Phrase("Vuelto", fuenteDescripcionTablasBOLD));
+                        titleReturn.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        titleReturn.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        titleReturn.setBorder(0);
 
-                        PdfPCell montovuelto = new PdfPCell(new Phrase(currencys.formatCurrency(Double.parseDouble(rs.getString("vuelto_importe"))).substring(1), fuenteDescripcionTablasBOLDSamll));
-                        montovuelto.setHorizontalAlignment(Element.ALIGN_LEFT);
-                        montovuelto.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                        montovuelto.setBorder(0);
+                        PdfPCell datatTitleReturn = new PdfPCell(new Phrase("S/" + currencys.formatCurrency(Double.parseDouble(rs.getString("v.amount_returned"))).substring(1), fuenteDescripcionTablasBOLDSamll));
+                        datatTitleReturn.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        datatTitleReturn.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        datatTitleReturn.setBorder(0);
 
-                        footerAdicional.addCell(vendedor);
-                        footerAdicional.addCell(nombrevendedor);
                         footerAdicional.addCell(SELLER);
                         footerAdicional.addCell(NAMESELLER);
-                        footerAdicional.addCell(nombreimporte);
-                        footerAdicional.addCell(montoimporte);
-                        footerAdicional.addCell(nombrevuelto);
-                        footerAdicional.addCell(montovuelto);
+                        footerAdicional.addCell(titleImport);
+                        footerAdicional.addCell(dataTitleImport);
+                        footerAdicional.addCell(titleReturn);
+                        footerAdicional.addCell(datatTitleReturn);
                     }
                 }
             } catch (NumberFormatException | SQLException e) {
+                System.out.println(e);
             }
 
             document.add(footerAdicional);
 
-            Barcode128 code = new Barcode128();
-            code.setCode(numberVoucher);
-            Image barCode = code.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-            barCode.scalePercent(150f);
-            barCode.setIndentationLeft(50f);
-            document.add(barCode);
             try {
                 int contFooterAdicional = 0;
                 Statement st = cn.createStatement();
@@ -742,23 +513,17 @@ public class TicketSalesPDF {
                 while (rs.next()) {
                     contFooterAdicional++;
                     if (contFooterAdicional <= 1) {
-                        Paragraph textoagradecimiento = new Paragraph(rs.getString("pcv.parametro_agradecimiento"), fuenteDescripcionTablasBOLD);
+                        Paragraph textoagradecimiento = new Paragraph("¡Gracias por su compra regrese pronto!", fuenteDescripcionTablasBOLD);
                         textoagradecimiento.setAlignment(Element.ALIGN_CENTER);
-                        Paragraph textoinformacion = new Paragraph(rs.getString("pcv.parametro_informacion"), fuenteDescripcionTablasLIGHT);
+                        Paragraph textoinformacion = new Paragraph("¡Por favor revise sus productos antes de retirarse del establecimiento,no aceptamos reclamos posteriores!", fuenteDescripcionTablasLIGHT);
                         textoinformacion.setAlignment(Element.ALIGN_CENTER);
-
-                        Paragraph textFirma = new Paragraph("----------------------------             ----------------------------\n"
-                                + "ENTREGADO POR:               RECIBIDO POR:", fuenteDescripcionTablasLIGHT);
-                        textFirma.setAlignment(Element.ALIGN_CENTER);
-
                         document.add(textoagradecimiento);
                         document.add(textoinformacion);
-                        document.add(saltoLinea1);
-                        document.add(textFirma);
 
                     }
                 }
             } catch (DocumentException | SQLException e) {
+                System.out.println(e);
             }
 
             document.close();
@@ -766,11 +531,11 @@ public class TicketSalesPDF {
                 ConnectionDB cnS = new ConnectionDB();
                 cnS.closeConection();
             } catch (SQLException e) {
+                System.out.println(e);
             }
             try {
-                PDDocument files = PDDocument.load(new File("D:\\sistemapos/comprobantes/TICKET.pdf"));
+                PDDocument files = PDDocument.load(new File(env.URL_SERVER_FILES + "comprobantes/TICKET "+nameCustomerVoucher+".pdf"));
                 PrinterJob job = PrinterJob.getPrinterJob();
-
                 LOGGER.log(Level.INFO, "Mostrando el dialogo de impresion");
                 if (job.printDialog() == true) {
                     job.setPageable(new PDFPageable(files));
@@ -779,9 +544,11 @@ public class TicketSalesPDF {
                     job.print();
                 }
             } catch (HeadlessException | PrinterException | IOException | NullPointerException e) {
+                System.out.println(e);
             }
 
         } catch (DocumentException | IOException ex) {
+            System.out.println(ex);
         }
     }
 

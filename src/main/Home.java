@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import maincomponents.Company;
 import maincomponents.Customer;
+import maincomponents.Reports;
 import maincomponents.Sales;
 import maincomponents.Setting;
 import maincomponents.Shopping;
@@ -737,8 +738,7 @@ public class Home extends javax.swing.JFrame {
         mnuCustomer.setBackground(new Color(238,240,241));
         mnuSetting.setColorText(new Color(76,76,76));
         mnuSetting.setBackground(new Color(238,240,241));
-//        new ChangePanel(PrincipalHomes, new Consults());
-//        cLogin.loginAccessConsults(idUserLogin.getText());
+        new ChangePanel(PrincipalHomes, new Reports());
         lblTitleHome.setText("Módulo de consultas y reporte");
     }//GEN-LAST:event_mnuReportActionPerformed
 

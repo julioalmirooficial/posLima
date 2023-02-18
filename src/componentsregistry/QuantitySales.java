@@ -1,7 +1,6 @@
 package componentsregistry;
 
 import componenttoselect.ModalProductsSales;
-import componenttoselect.ModalProductsShopping;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -16,6 +15,7 @@ public class QuantitySales extends javax.swing.JDialog {
     public static final int RET_CANCEL = 0;
 
     public static String discount;
+    public static String stock;
 
     public QuantitySales(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -37,29 +37,29 @@ public class QuantitySales extends javax.swing.JDialog {
         return returnStatus;
     }
 
-//    void generateNewPriceSale() {
-//        if (txtQuantity.getText().length() <= 0) {
-//            new rojerusan.RSNotifyAnimated("ERROR", "EL PRECIO DE COMPRA NO DEBE DE IR CON EL VALOR DE VACIO, INGRESA Y UTLIDAD Y EL PRECIO DE COMPRA",
-//                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-//                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
-//            return;
-//        }
-//        if (Double.parseDouble(txtQuantity.getText()) <= 0) {
-//            new rojerusan.RSNotifyAnimated("ERROR", "EL PRECIO DE COMPRA NO DEBE DE IR CON EL VALOR DE 0, INGRESA Y UTLIDAD Y EL PRECIO DE COMPRA",
-//                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
-//                    RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
-//            return;
-//        }
-//        double generatePercentage = Double.parseDouble(txtUtility.getText()) / 100;
-//        double generateUtility = Double.parseDouble(txtQuantity.getText()) * generatePercentage;
-//        double generateNewPrice = Double.parseDouble(txtQuantity.getText()) + generateUtility;
-//        txtPriceSale.setText(String.valueOf(Math.round(generateNewPrice * 100) / 100d));
-//    }
     void insert() {
+        if (!txtQuantity.getText().matches("^\\d+(\\.\\d+)?$")) {
+                new rojerusan.RSNotifyAnimated("ERROR", "INGRESA UNA CANTIDAD VALIDA, ESTE CAMPO NO PERMITE CARACTERES",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                return;
+            }
+        if (!txtDiscount.getText().matches("^\\d+(\\.\\d+)?$")) {
+                new rojerusan.RSNotifyAnimated("ERROR", "INGRESA UN DESCUENTO VALIDO PARA EL PRODUCTO, ESTE CAMPO NO PERMITE CARACTERES",
+                        5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                        RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+                return;
+            }
         if (Double.parseDouble(txtQuantity.getText()) <= 0) {
             new rojerusan.RSNotifyAnimated("ERROR", "POR FAVOR INGRESA LA CANTIDAD DEL PRODUCTO",
                     5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
                     RSNotifyAnimated.TypeNotify.ERROR).setVisible(true);
+            return;
+        }
+        if ( Integer.parseInt(txtQuantity.getText()) > Integer.parseInt(stock)) {
+            new rojerusan.RSNotifyAnimated("ADEVERTENCIA", "LO SENTIMOS NO PODEMOS AGREAR EL PRODUCTO A LA LISTA DE COMPRAS DEL CLIENTE, NO TIENES STOCK SUFICIENTE",
+                    5, RSNotifyAnimated.PositionNotify.BottomRight, RSNotifyAnimated.AnimationNotify.RightLeft,
+                    RSNotifyAnimated.TypeNotify.WARNING).setVisible(true);
             return;
         }
 

@@ -25,7 +25,7 @@ public class ControllerCustomer {
         model = new DefaultTableModel(null, headers);
 
         query = "SELECT * FROM customer "
-                + "WHERE CONCAT(full_name,' ',number_document)like '%" + search + "%' ORDER BY id DESC LIMIT 40";
+                + "WHERE CONCAT(full_name,' ',number_document)like '%" + search + "%' AND id != 1 ORDER BY id DESC LIMIT 40";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(query);
